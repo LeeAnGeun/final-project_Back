@@ -61,6 +61,14 @@
 		SET PWD=#{pwd}
 		WHERE EMAIL=#{email} 
 	</update>
+
+
+	<!-- classMaster Update -->
+	<update id="classMasterUpdate" parameterType="bit.com.a.dto.onedayClassDto">		
+		UPDATE ACLAPMEMBER
+		SET CLASSMASTER=1
+		WHERE MEMNUM=#{masterNum} 
+	</update>
 	
 	
 	<!-- //////////////////////////////////////////////// -->
@@ -123,27 +131,12 @@
 	</select>
 
 
-<update id="chargePoints" parameterType="HashMap" >
-	UPDATE ACLAPMEMBER
-	SET MYPOINT=MYPOINT+#{money}
-	WHERE EMAIL=#{email}
-</update>
+	<update id="chargePoints" parameterType="HashMap" >
+		UPDATE ACLAPMEMBER
+		SET MYPOINT=MYPOINT+#{money}
+		WHERE EMAIL=#{email}
+	</update>
 
 
 
 </mapper>
-<!-- 
-	private int memNum;
-	private String email;
-	private String pwd;
-	private String userName;
-	private String nickName;
-	private String phoneNum;
-	private String interest1;
-	private String interest2;
-	private String interest3;
-	private String profilePic;
-	private int auth;
-	private int classMaster;
-	private int myPoint;
--->

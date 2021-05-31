@@ -47,5 +47,6 @@ public interface onedayClassDao {
 		public List<onedayClassDto> getBestClassList();
 		
 		
-		
+		// 클래스 생성하기 
+		public int onedayClassWrite();		
 }

@@ -21,16 +21,16 @@ public class onedayClassDto {
 	   private String image4;
 	   private String image5;   
 	   private String location;
-	   private String youtubeLinke;
+	   private String youtubeLink;
 	   private int likeCount;
 	   private int del;
 	   private int oldRegNum;
 	   private int newRegNum;
+	   private String layerSelect; //이미지 레이어 타입 ("A", "B", "C")
 	   
 	   private String profilePic; // master의 프로필 사진 
 	   
-	   
-	   private int avgPoint;
+	   private int avgPoint; 
 	   
 	   public onedayClassDto() {
 	      // TODO Auto-generated constructor stub
@@ -39,8 +39,8 @@ public class onedayClassDto {
 	public onedayClassDto(int classNum, int masterNum, String instructor, String primaryCategory,
 			String secondaryCategory, String title, String startDate, String endDate, int price, String information,
 			String duration, String limitNum, String preparation, String aboutMe, String image1, String image2,
-			String image3, String image4, String image5, String location, String youtubeLinke, int likeCount, int del,
-			int oldRegNum, int newRegNum, String profilePic) {
+			String image3, String image4, String image5, String location, String youtubeLink, int likeCount, int del,
+			int oldRegNum, int newRegNum, String profilePic, String layerSelect) {
 		super();
 		this.classNum = classNum;
 		this.masterNum = masterNum;
@@ -62,12 +62,13 @@ public class onedayClassDto {
 		this.image4 = image4;
 		this.image5 = image5;
 		this.location = location;
-		this.youtubeLinke = youtubeLinke;
+		this.youtubeLink = youtubeLink;
 		this.likeCount = likeCount;
 		this.del = del;
 		this.oldRegNum = oldRegNum;
 		this.newRegNum = newRegNum;
 		this.profilePic = profilePic;
+		this.layerSelect = layerSelect;
 	}
 	
 	//avgPoint포함된것
@@ -75,7 +76,7 @@ public class onedayClassDto {
 			String secondaryCategory, String title, String startDate, String endDate, int price, String information,
 			String duration, String limitNum, String preparation, String aboutMe, String image1, String image2,
 			String image3, String image4, String image5, String location, String youtubeLinke, int likeCount, int del,
-			int oldRegNum, int newRegNum, String profilePic, int avgPoint) {
+			int oldRegNum, int newRegNum, String profilePic, String layerSelect, int avgPoint) {
 		super();
 		this.classNum = classNum;
 		this.masterNum = masterNum;
@@ -97,12 +98,13 @@ public class onedayClassDto {
 		this.image4 = image4;
 		this.image5 = image5;
 		this.location = location;
-		this.youtubeLinke = youtubeLinke;
+		this.youtubeLink = youtubeLinke;
 		this.likeCount = likeCount;
 		this.del = del;
 		this.oldRegNum = oldRegNum;
 		this.newRegNum = newRegNum;
 		this.profilePic = profilePic;
+		this.layerSelect = layerSelect;
 		this.avgPoint = avgPoint;
 	}
 
@@ -266,12 +268,12 @@ public class onedayClassDto {
 		this.location = location;
 	}
 
-	public String getYoutubeLinke() {
-		return youtubeLinke;
+	public String getYoutubeLink() {
+		return youtubeLink;
 	}
 
-	public void setYoutubeLinke(String youtubeLinke) {
-		this.youtubeLinke = youtubeLinke;
+	public void setYoutubeLink(String youtubeLink) {
+		this.youtubeLink = youtubeLink;
 	}
 
 	public int getLikeCount() {
@@ -314,14 +316,19 @@ public class onedayClassDto {
 		this.profilePic = profilePic;
 	}
 	
-	
-	
 	public int getAvgPoint() {
 		return avgPoint;
 	}
 
 	public void setAvgPoint(int avgPoint) {
 		this.avgPoint = avgPoint;
+	}
+	public String getLayerSelect() {
+		return layerSelect;
+	}
+	
+	public void setLayerSelect(String layerSelect) {
+		this.layerSelect = layerSelect;
 	}
 
 	@Override
@@ -331,8 +338,8 @@ public class onedayClassDto {
 				+ title + ", startDate=" + startDate + ", endDate=" + endDate + ", price=" + price + ", information="
 				+ information + ", duration=" + duration + ", limitNum=" + limitNum + ", preparation=" + preparation
 				+ ", aboutMe=" + aboutMe + ", image1=" + image1 + ", image2=" + image2 + ", image3=" + image3
-				+ ", image4=" + image4 + ", image5=" + image5 + ", location=" + location + ", youtubeLinke="
-				+ youtubeLinke + ", likeCount=" + likeCount + ", del=" + del + ", oldRegNum=" + oldRegNum
+				+ ", image4=" + image4 + ", image5=" + image5 + ", location=" + location + ", youtubeLink="
+				+ youtubeLink + ", likeCount=" + likeCount + ", del=" + del + ", oldRegNum=" + oldRegNum
 				+ ", newRegNum=" + newRegNum + ", profilePic=" + profilePic + ", avgPoint=" + avgPoint + "]";
 	}
 

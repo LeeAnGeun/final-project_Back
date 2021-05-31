@@ -116,6 +116,18 @@ ORDER BY AVGPOINT DESC
 
 
 
+<!-- 클래스 만들기 -->
+<insert id="onedayClassWrite" parameterType="bit.com.a.dto.onedayClassDto">
+		INSERT INTO ONEDAYCLASS (CLASSNUM, MASTERNUM, INSTRUCTOR, PRIMARYCATEGORY, SECONDARYYCATEGORY, TITLE, 
+		                         STARTDATE, ENDDATE, PRICE, DURATION, LIMITNUM, PREPARATION, ABOUTME,
+		                         IMAGE1, IMAGE2, IMAGE3, IMAGE4, IMAGE5, LOCATION, YOUTUBELINK, LIKECOUNT, DEL, OLDREGNUM, NEWREGNUM,
+		                         LAYERSELECT)
+		VALUES(SEQ_CLASS.NEXTVAL, #{masterNum}, #{instructor}, #{primaryCategory}, #{secondaryCategory}, #{title}, 
+		       #{startDate}, #{endDate}, #{price}, #{}, #{information}, #{duration}, #{limitNum}, #{preparation}, #{aboutMe},
+		       #{image1}, #{image2}, #{image3}, #{image4}, #{image5}, #{location}, #{youtubeLink}, 0, 0, 0, 0, #{layerSelect})
+</insert>
+
+
 
 
 

@@ -1,6 +1,5 @@
 package bit.com.a.dao;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import bit.com.a.dto.aclapMemberDto;
 import bit.com.a.dto.aclapParam;
+import bit.com.a.dto.onedayClassDto;
 
 @Mapper
 @Repository
@@ -21,6 +21,7 @@ public interface aclapMemberDao {
 	public int findPwdAfUpdate(aclapMemberDto dto);
 	public aclapMemberDto googleKakaoLogin(aclapMemberDto dto);
 	public int googleKakaoRegi(aclapMemberDto dto);
+	public int classMasterUpdate(onedayClassDto onedayClassDto);
 	
 	// 마이페이지 정보 가져오기
 	public aclapMemberDto myinfo(aclapMemberDto dto);

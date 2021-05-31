@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import bit.com.a.dao.aclapMemberDao;
 import bit.com.a.dao.onedayClassDao;
 
 import bit.com.a.dto.oneDayClassParam;
@@ -81,5 +82,16 @@ public class onedayClassService {
 		return onedayClassDao.getBestClassList();
 	};
 
-	
+	public boolean onedayClassWrite() {
+		// DB 저장
+		int n = onedayClassDao.onedayClassWrite();
+		
+		// class master Update 
+		//int n = aclapMemberDao.classMasterUpdate();
+		
+		if(n>0)
+			System.out.println("onedayClassWrite Success");
+		return true;
+	};		
+
 }
