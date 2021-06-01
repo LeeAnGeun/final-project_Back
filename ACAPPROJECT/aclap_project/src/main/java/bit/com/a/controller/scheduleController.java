@@ -2,7 +2,9 @@ package bit.com.a.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,8 +53,10 @@ public class scheduleController {
 	
 	// classDtail.html에서 classSchedule을 얻기 위함
 	@RequestMapping(value="/classSchedulList", method = {RequestMethod.GET, RequestMethod.POST}) 
-	public List<classScheduleDto> classSchedulList(onedayClassDto dto){ 
+	public Map<String, Object> classSchedulList(onedayClassDto dto){ 
 		System.out.println("classSchedulList dto = " + dto);
+		
+		Map<String, Object> clsMap = new HashMap<String, Object>();
 		
 		// classSchedule List
 		List<classScheduleDto> clist = new ArrayList<classScheduleDto>();
@@ -60,7 +64,12 @@ public class scheduleController {
 		clist = scheduleService.classScheduleList(dto);
 		System.out.println("classSchedulList : " + clist.toString());
 		
-		return clist;
+		List<classScheduleDto> noDateList = new ArrayList<classScheduleDto>();
+		noDateList = scheduleService.noDateList(dto);
+		System.out.println("noDateList = " + noDateList.toString());
+		clsMap.put("clist", clist);
+		clsMap.put("noDateList", noDateList);
+		return clsMap;
 	}
 	 
 }

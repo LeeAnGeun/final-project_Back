@@ -7,6 +7,7 @@ public class onedayClassDto {
 	   private String primaryCategory;
 	   private String secondaryCategory;
 	   private String title;
+	   private String content;
 	   private String startDate;
 	   private String endDate;
 	   private int price;
@@ -29,84 +30,10 @@ public class onedayClassDto {
 	   private String layerSelect; //이미지 레이어 타입 ("A", "B", "C")
 	   
 	   private String profilePic; // master의 프로필 사진 
-	   
 	   private int avgPoint; 
 	   
 	   public onedayClassDto() {
-	      // TODO Auto-generated constructor stub
 	   }
-	   
-	public onedayClassDto(int classNum, int masterNum, String instructor, String primaryCategory,
-			String secondaryCategory, String title, String startDate, String endDate, int price, String information,
-			String duration, String limitNum, String preparation, String aboutMe, String image1, String image2,
-			String image3, String image4, String image5, String location, String youtubeLink, int likeCount, int del,
-			int oldRegNum, int newRegNum, String profilePic, String layerSelect) {
-		super();
-		this.classNum = classNum;
-		this.masterNum = masterNum;
-		this.instructor = instructor;
-		this.primaryCategory = primaryCategory;
-		this.secondaryCategory = secondaryCategory;
-		this.title = title;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.price = price;
-		this.information = information;
-		this.duration = duration;
-		this.limitNum = limitNum;
-		this.preparation = preparation;
-		this.aboutMe = aboutMe;
-		this.image1 = image1;
-		this.image2 = image2;
-		this.image3 = image3;
-		this.image4 = image4;
-		this.image5 = image5;
-		this.location = location;
-		this.youtubeLink = youtubeLink;
-		this.likeCount = likeCount;
-		this.del = del;
-		this.oldRegNum = oldRegNum;
-		this.newRegNum = newRegNum;
-		this.profilePic = profilePic;
-		this.layerSelect = layerSelect;
-	}
-	
-	//avgPoint포함된것
-	public onedayClassDto(int classNum, int masterNum, String instructor, String primaryCategory,
-			String secondaryCategory, String title, String startDate, String endDate, int price, String information,
-			String duration, String limitNum, String preparation, String aboutMe, String image1, String image2,
-			String image3, String image4, String image5, String location, String youtubeLinke, int likeCount, int del,
-			int oldRegNum, int newRegNum, String profilePic, String layerSelect, int avgPoint) {
-		super();
-		this.classNum = classNum;
-		this.masterNum = masterNum;
-		this.instructor = instructor;
-		this.primaryCategory = primaryCategory;
-		this.secondaryCategory = secondaryCategory;
-		this.title = title;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.price = price;
-		this.information = information;
-		this.duration = duration;
-		this.limitNum = limitNum;
-		this.preparation = preparation;
-		this.aboutMe = aboutMe;
-		this.image1 = image1;
-		this.image2 = image2;
-		this.image3 = image3;
-		this.image4 = image4;
-		this.image5 = image5;
-		this.location = location;
-		this.youtubeLink = youtubeLinke;
-		this.likeCount = likeCount;
-		this.del = del;
-		this.oldRegNum = oldRegNum;
-		this.newRegNum = newRegNum;
-		this.profilePic = profilePic;
-		this.layerSelect = layerSelect;
-		this.avgPoint = avgPoint;
-	}
 
 	public int getClassNum() {
 		return classNum;
@@ -115,7 +42,7 @@ public class onedayClassDto {
 	public void setClassNum(int classNum) {
 		this.classNum = classNum;
 	}
-	
+
 	public int getMasterNum() {
 		return masterNum;
 	}
@@ -154,6 +81,14 @@ public class onedayClassDto {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
 	}
 
 	public String getStartDate() {
@@ -308,6 +243,14 @@ public class onedayClassDto {
 		this.newRegNum = newRegNum;
 	}
 
+	public String getLayerSelect() {
+		return layerSelect;
+	}
+
+	public void setLayerSelect(String layerSelect) {
+		this.layerSelect = layerSelect;
+	}
+
 	public String getProfilePic() {
 		return profilePic;
 	}
@@ -315,7 +258,7 @@ public class onedayClassDto {
 	public void setProfilePic(String profilePic) {
 		this.profilePic = profilePic;
 	}
-	
+
 	public int getAvgPoint() {
 		return avgPoint;
 	}
@@ -323,25 +266,57 @@ public class onedayClassDto {
 	public void setAvgPoint(int avgPoint) {
 		this.avgPoint = avgPoint;
 	}
-	public String getLayerSelect() {
-		return layerSelect;
-	}
-	
-	public void setLayerSelect(String layerSelect) {
+
+	public onedayClassDto(int classNum, int masterNum, String instructor, String primaryCategory,
+			String secondaryCategory, String title, String content, String startDate, String endDate, int price,
+			String information, String duration, String limitNum, String preparation, String aboutMe, String image1,
+			String image2, String image3, String image4, String image5, String location, String youtubeLink,
+			int likeCount, int del, int oldRegNum, int newRegNum, String layerSelect, String profilePic, int avgPoint) {
+		super();
+		this.classNum = classNum;
+		this.masterNum = masterNum;
+		this.instructor = instructor;
+		this.primaryCategory = primaryCategory;
+		this.secondaryCategory = secondaryCategory;
+		this.title = title;
+		this.content = content;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.price = price;
+		this.information = information;
+		this.duration = duration;
+		this.limitNum = limitNum;
+		this.preparation = preparation;
+		this.aboutMe = aboutMe;
+		this.image1 = image1;
+		this.image2 = image2;
+		this.image3 = image3;
+		this.image4 = image4;
+		this.image5 = image5;
+		this.location = location;
+		this.youtubeLink = youtubeLink;
+		this.likeCount = likeCount;
+		this.del = del;
+		this.oldRegNum = oldRegNum;
+		this.newRegNum = newRegNum;
 		this.layerSelect = layerSelect;
+		this.profilePic = profilePic;
+		this.avgPoint = avgPoint;
 	}
 
 	@Override
 	public String toString() {
 		return "onedayClassDto [classNum=" + classNum + ", masterNum=" + masterNum + ", instructor=" + instructor
 				+ ", primaryCategory=" + primaryCategory + ", secondaryCategory=" + secondaryCategory + ", title="
-				+ title + ", startDate=" + startDate + ", endDate=" + endDate + ", price=" + price + ", information="
-				+ information + ", duration=" + duration + ", limitNum=" + limitNum + ", preparation=" + preparation
-				+ ", aboutMe=" + aboutMe + ", image1=" + image1 + ", image2=" + image2 + ", image3=" + image3
-				+ ", image4=" + image4 + ", image5=" + image5 + ", location=" + location + ", youtubeLink="
-				+ youtubeLink + ", likeCount=" + likeCount + ", del=" + del + ", oldRegNum=" + oldRegNum
-				+ ", newRegNum=" + newRegNum + ", profilePic=" + profilePic + ", avgPoint=" + avgPoint + "]";
+				+ title + ", content=" + content + ", startDate=" + startDate + ", endDate=" + endDate + ", price="
+				+ price + ", information=" + information + ", duration=" + duration + ", limitNum=" + limitNum
+				+ ", preparation=" + preparation + ", aboutMe=" + aboutMe + ", image1=" + image1 + ", image2=" + image2
+				+ ", image3=" + image3 + ", image4=" + image4 + ", image5=" + image5 + ", location=" + location
+				+ ", youtubeLink=" + youtubeLink + ", likeCount=" + likeCount + ", del=" + del + ", oldRegNum="
+				+ oldRegNum + ", newRegNum=" + newRegNum + ", layerSelect=" + layerSelect + ", profilePic=" + profilePic
+				+ ", avgPoint=" + avgPoint + "]";
 	}
+
 
 	
 }

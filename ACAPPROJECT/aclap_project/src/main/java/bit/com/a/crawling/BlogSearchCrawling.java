@@ -11,8 +11,8 @@ import org.jsoup.select.Elements;
 
 import bit.com.a.dto.BlogSearchDto;
 
-public class BlogSearch {
-	public static List<BlogSearchDto> naverSearch(String keyword)throws IOException {	
+public class BlogSearchCrawling {
+	public static List<BlogSearchDto> naverSearch(String keyword) throws IOException {	
 		
 		// jsoup 생성
 		Document doc = Jsoup.connect("https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query="+keyword).get();
@@ -29,9 +29,7 @@ public class BlogSearch {
 			String title = content.text();      // text 뽑아오기
 			String url = content.attr("href");  // attr 뽑아오기
 			
-			System.out.println(i+1);
-			System.out.println(title);
-			System.out.println(url);
+			System.out.println(i+1+"제목 : "+title+" url : "+url);
 			System.out.println("");
 
 			// 리스트에 담기

@@ -63,14 +63,6 @@
 	</update>
 
 
-	<!-- classMaster Update -->
-	<update id="classMasterUpdate" parameterType="bit.com.a.dto.onedayClassDto">		
-		UPDATE ACLAPMEMBER
-		SET CLASSMASTER=1
-		WHERE MEMNUM=#{masterNum} 
-	</update>
-	
-	
 	<!-- //////////////////////////////////////////////// -->
 
 	
@@ -93,16 +85,14 @@
 	</delete>
 	
 
-	
-	
 
 	<!-- classMaster Update -->
-	<update id="classMasterUpdate" parameterType="bit.com.a.dto.aclapMemberDto">		
+	<update id="classMasterUpdate" parameterType="java.lang.Integer">		
 		UPDATE ACLAPMEMBER
 		SET CLASSMASTER=1
 		WHERE MEMNUM=#{memNum}
 	</update>
-	
+
 	
 	<!-- myPoint Update -->
 	<update id="myPointUpdate" parameterType="bit.com.a.dto.aclapMemberDto">		

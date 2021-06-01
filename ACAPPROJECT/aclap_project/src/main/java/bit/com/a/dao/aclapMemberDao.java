@@ -21,7 +21,7 @@ public interface aclapMemberDao {
 	public int findPwdAfUpdate(aclapMemberDto dto);
 	public aclapMemberDto googleKakaoLogin(aclapMemberDto dto);
 	public int googleKakaoRegi(aclapMemberDto dto);
-	public int classMasterUpdate(onedayClassDto onedayClassDto);
+	public int classMasterUpdate(int memNum);
 	
 	// 마이페이지 정보 가져오기
 	public aclapMemberDto myinfo(aclapMemberDto dto);

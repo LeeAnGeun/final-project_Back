@@ -38,8 +38,9 @@
 SELECT YMD AS RDATE, PRICE, DURATION, LIMITNUM
 FROM (  SELECT TO_DATE (#{startDate})+(LEVEL) YMD
         FROM DUAL
-        CONNECT BY TO_DATE (#{startDate})+(LEVEL) &lt;= TO_DATE (#{endDate}) ) D, NOCLASSDATE N, ONEDAYCLASS O
-WHERE O.CLASSNUM = N.CLASSNUM AND O.CLASSNUM = #{classNum} AND YMD != N.NOCLASSDATE
+        CONNECT BY TO_DATE (#{startDate})+(LEVEL) &lt;= TO_DATE (#{endDate}) ) D, ONEDAYCLASS O
+WHERE YMD NOT IN (SELECT NOCLASSDATE FROM NOCLASSDATE WHERE CLASSNUM=#{classNum}) AND O.CLASSNUM = #{classNum}
+ORDER BY RDATE
 </select>
 
 <!-- classDtail.html에서 해당 일에 신청자 수를 얻기 위함  -->
@@ -48,6 +49,13 @@ WHERE O.CLASSNUM = N.CLASSNUM AND O.CLASSNUM = #{classNum} AND YMD != N.NOCLASSD
 	FROM SCHEDULE
 	WHERE CLASSNUM = #{classNum}
 	GROUP BY RDATE
+	ORDER BY RDATE
+</select>
+
+<select id="noDateList" parameterType="bit.com.a.dto.onedayClassDto" resultType="bit.com.a.dto.classScheduleDto">
+	SELECT NOCLASSDATE AS RDATE
+	FROM NOCLASSDATE 
+	WHERE CLASSNUM = #{classNum}
 	ORDER BY RDATE
 </select>
 

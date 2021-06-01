@@ -36,9 +36,9 @@ public interface onedayClassDao {
 		//클래스 리스트 가져오기
 		public List<onedayClassDto> classListData(oneDayClassParam param);
 		
-		//클래스 리스트 갯수 가져오기
-		public int classListCount(oneDayClassParam param);
-
+		
+		
+		
 		
 		// home : 클래스 최신순 리스트 출력
 		public List<onedayClassDto> getNewestClassList();
@@ -46,7 +46,9 @@ public interface onedayClassDao {
 		// home : 클래스 인기순 출력
 		public List<onedayClassDto> getBestClassList();
 		
-		
 		// 클래스 생성하기 
-		public int onedayClassWrite();		
+		public int onedayClassWrite(onedayClassDto dto);	
+		
+		// 생성한 클래스 seq 가져오기
+		public List<Integer> onedayClassWriteAfClassNum(onedayClassDto dto);
 }

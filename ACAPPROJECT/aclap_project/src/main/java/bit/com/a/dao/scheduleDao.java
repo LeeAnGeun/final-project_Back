@@ -31,4 +31,7 @@ public interface scheduleDao {
 	
 	// classDtail.html에서 해당 일에 신청자 수를 얻기 위함
 	public List<classSchedulCount> classSchedulCount(onedayClassDto dto);
+	
+	// NOCLASSDATE를 얻기 위함
+	public List<classScheduleDto> noDateList(onedayClassDto dto);
 }

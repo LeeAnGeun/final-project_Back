@@ -66,10 +66,7 @@ public class onedayClassService {
 	public List<onedayClassDto> classListData(oneDayClassParam param) {
 		return onedayClassDao.classListData(param);
 	}
-	//클래스 리스트 갯수
-	public int classListCount(oneDayClassParam param) {
-		return onedayClassDao.classListCount(param);
-	}
+	
 
 	//----------------------------home----------------------------------
 	// home : 클래스 최신순 리스트 출력
@@ -82,16 +79,12 @@ public class onedayClassService {
 		return onedayClassDao.getBestClassList();
 	};
 
-	public boolean onedayClassWrite() {
-		// DB 저장
-		int n = onedayClassDao.onedayClassWrite();
-		
-		// class master Update 
-		//int n = aclapMemberDao.classMasterUpdate();
-		
+	// 원데이클래스 생성
+	public int onedayClassWrite(onedayClassDto dto) {
+		int n = onedayClassDao.onedayClassWrite(dto);
 		if(n>0)
-			System.out.println("onedayClassWrite Success");
-		return true;
+			System.out.println("=== onedayClassWrite Success ===");
+		List<Integer> classSeq = onedayClassDao.onedayClassWriteAfClassNum(dto);
+		return classSeq.get(0);
 	};		
-
 }

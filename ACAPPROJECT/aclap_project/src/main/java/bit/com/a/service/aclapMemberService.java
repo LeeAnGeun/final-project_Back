@@ -61,11 +61,14 @@ public class aclapMemberService {
 	public void chargePoints(Map<String, Object> chargePoints) {
 		aclapMemberDao.chargePoints(chargePoints);
 	}
+	public void classMasterUpdate(int memNum) {
+		aclapMemberDao.classMasterUpdate(memNum);
+		System.out.println("== classMasterUpdate Success! == ");
+	}
 
 	
 	//선호도
 	public void setInterest(aclapMemberDto dto) {
 		aclapMemberDao.setInterest(dto);
-		
 	};
 }

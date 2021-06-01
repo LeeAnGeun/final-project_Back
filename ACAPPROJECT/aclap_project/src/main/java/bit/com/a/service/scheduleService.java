@@ -43,6 +43,7 @@ public class scheduleService {
 	public List<classScheduleDto> classScheduleList(onedayClassDto dto){
 		// classSchedule List
 		List<classScheduleDto> clist = scheduleDao.classScheduleList(dto);
+		System.out.println("clist = " + clist);
 		
 		// classSchedulCount List
 		List<classSchedulCount> countlist = scheduleDao.classSchedulCount(dto);
@@ -56,7 +57,7 @@ public class scheduleService {
 				classSchedulCount count = countlist.get(j);
 				
 				if( (classdto.getRdate()).substring(0, 10).equals(count.getRdate())) {
-					System.out.println("최신화했니?");
+					
 					int limitnum = Integer.parseInt( classdto.getLimitNum() ) - count.getCount();
 					classdto.setLimitNum(Integer.toString( limitnum ));
 					clist.set(i, classdto);
@@ -65,6 +66,11 @@ public class scheduleService {
 		}
 		System.out.println("완성된 clist : " + clist.toString());
 		return clist;
+	}
+	
+	// NOCLASSDATE를 얻기 위함
+	public List<classScheduleDto> noDateList(onedayClassDto dto){
+		return scheduleDao.noDateList(dto);
 	}
 	
 }
