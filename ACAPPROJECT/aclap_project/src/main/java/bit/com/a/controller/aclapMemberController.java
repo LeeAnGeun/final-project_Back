@@ -265,6 +265,14 @@ public class aclapMemberController {
 		
 	}
 	
+	// 나의 정보 가져오기
+	@RequestMapping(value = "/getMemberDto", method = RequestMethod.POST)
+	public aclapMemberDto getMemberDto(aclapMemberDto dto){
+		System.out.println("getMemberDto dto = " + dto.toString());
 		
+		aclapMemberDto memDto = service.getMemberDto(dto);
+		
+		return memDto;
+	}
 	
 }

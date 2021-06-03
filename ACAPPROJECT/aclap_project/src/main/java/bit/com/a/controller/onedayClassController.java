@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import bit.com.a.FileUploadUtiles;
 import bit.com.a.NoClassUtil;
+import bit.com.a.dto.aclapMemberDto;
 import bit.com.a.dto.noClassDateDto;
 import bit.com.a.dto.oneDayClassParam;
 import bit.com.a.dto.onedayClassDto;
@@ -49,6 +50,16 @@ public class onedayClassController {
 
 		return oClass;
 	}
+	
+	// 멤버가 만든 클래스 수를 counter를 위함
+	@RequestMapping(value = "/masterClassCounter", method = RequestMethod.POST)
+	public int masterClassCounter(aclapMemberDto dto) {
+		System.out.println("masterClassCounter dto = " + dto.toString());
+		
+		int count = onedayClassService.masterClassCounter(dto);
+		
+		return count;
+	}
 
 	// TODO 문의메일 발송
 	@RequestMapping(value = "/contactMail", method = RequestMethod.POST)
@@ -79,16 +90,20 @@ public class onedayClassController {
 	}
 
 
-	// 클래스 카테고리별 뷰에서 클래스 글 총수 가져오기
-	@RequestMapping(value = "/classListCount", method = { RequestMethod.GET, RequestMethod.POST })
-	public int classListCount(oneDayClassParam param) {
-		System.out.println("oneDayClassController classListCount()" + new Date());
 
-		int count = onedayClassService.classListCount(param);
+	/*
+	 * // 클래스 카테고리별 뷰에서 클래스 글 총수 가져오기
+	 * 
+	 * @RequestMapping(value = "/classListCount", method = { RequestMethod.GET,
+	 * RequestMethod.POST }) public int classListCount(oneDayClassParam param) {
+	 * System.out.println("oneDayClassController classListCount()" + new Date());
+	 * 
+	 * // int count = onedayClassService.classListCount(param);
+	 * 
+	 * // System.out.println("갯수 확인: " + count); // return count; }
+	 */
 
-		System.out.println("갯수 확인: " + count);
-		return count;
-	}
+
 
 	// Home_클래스 최신순 출력
 	@RequestMapping(value = "/getNewestClassList", method = { RequestMethod.GET, RequestMethod.POST })
@@ -115,7 +130,23 @@ public class onedayClassController {
 			System.out.println("getBestClassList Success");
 		return list;
 	}
+	
+	// HOME_추천클래스 출력 
+	@RequestMapping(value = "/getRecommendClassList", method = { RequestMethod.GET, RequestMethod.POST })
+	public List<onedayClassDto> getRecommendClassList(aclapMemberDto dto) {
+		System.out.println("////////// oneDayClassController getRecommendClassList() //////////");
+		
+		System.out.println("interest1 : " + dto.getInterest1());
+		System.out.println("interest2 : " + dto.getInterest2());
+		System.out.println("interest3 : " + dto.getInterest3());
 
+		List<onedayClassDto> list = onedayClassService.getRecommendClassList(dto);
+		if (list.size() != 0)
+			System.out.println("getRecommendClassList Success");
+		return list;
+	}
+
+	// 클래스 만들기 
 	@RequestMapping(value = "/onedayClassWrite", method = RequestMethod.POST)
 	public boolean addMember(onedayClassDto dto, HttpServletRequest req, String noClassDayOfWeek, 
 			@RequestParam("imageA1") MultipartFile imageA1, @RequestParam("imageA2") MultipartFile imageA2,

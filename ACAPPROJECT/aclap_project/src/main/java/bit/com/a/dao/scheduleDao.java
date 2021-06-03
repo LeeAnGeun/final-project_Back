@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import bit.com.a.dto.classSchedulCount;
 import bit.com.a.dto.classScheduleDto;
 import bit.com.a.dto.onedayClassDto;
+import bit.com.a.dto.participateDto;
 import bit.com.a.dto.scheduleDto;
 
 @Mapper
@@ -34,4 +35,16 @@ public interface scheduleDao {
 	
 	// NOCLASSDATE를 얻기 위함
 	public List<classScheduleDto> noDateList(onedayClassDto dto);
+	
+	// 스케줄 추가
+	public int addSchedule(participateDto dto);
+	
+	// 스탬프 추가
+	public int addStamp(participateDto dto);
+	
+	// 영수증 추가
+	public int addReceipt(participateDto dto);
+	
+	// 해당 일자 영수증 가져오기
+	public participateDto getReceiptData(participateDto dto);
 }

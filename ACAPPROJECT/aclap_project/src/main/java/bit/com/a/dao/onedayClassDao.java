@@ -13,6 +13,7 @@ import bit.com.a.dto.myStampDto;
 
 import bit.com.a.dto.onedayClassDto;
 import bit.com.a.dto.onedayParam;
+import bit.com.a.dto.participateDto;
 
 @Mapper
 @Repository
@@ -21,10 +22,11 @@ public interface onedayClassDao {
 		// 관리자 페이지 리스트
 		public List<onedayClassDto> getClassList(onedayParam par);
 		
-		//my page
+		// ondayClass Dtail
 		public onedayClassDto getOnedayClass(onedayClassDto dto);
 		
-
+		// 멤버가 만든 클래스 count
+		public int masterClassCounter(aclapMemberDto dto);
 		
 
 		// 나의 도장판 현황
@@ -46,9 +48,19 @@ public interface onedayClassDao {
 		// home : 클래스 인기순 출력
 		public List<onedayClassDto> getBestClassList();
 		
+		// home : 추천 클래스 출력
+		public List<onedayClassDto> getRecommendClassList(aclapMemberDto dto);
+		
+		
+		
 		// 클래스 생성하기 
 		public int onedayClassWrite(onedayClassDto dto);	
 		
 		// 생성한 클래스 seq 가져오기
 		public List<Integer> onedayClassWriteAfClassNum(onedayClassDto dto);
+		
+		
+		
+		// 참여자 수를 NewRegNum에 update
+		public int updateNewRegNum(participateDto dto);
 }

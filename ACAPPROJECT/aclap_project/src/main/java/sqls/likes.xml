@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+  <mapper namespace="bit.com.a.dao.likesDao">
+  
+    <!-- like 유무 체크 -->
+	<select id="checkLike" parameterType="bit.com.a.dto.likesDto" resultType="java.lang.Integer">
+		SELECT COUNT(MEMNUM)
+		FROM LIKES
+		WHERE MEMNUM=#{memNum} AND CLASSNUM=#{classNum}
+	</select>
+  
+    <!-- like 등록 -->
+	<insert id="addLike" parameterType="bit.com.a.dto.likesDto">
+		INSERT INTO LIKES (MEMNUM, CLASSNUM)
+		VALUES(#{memNum}, #{classNum})
+	</insert>
+	
+	<!-- like 삭제 -->
+	<delete id="delLike" parameterType="bit.com.a.dto.likesDto">
+		DELETE FROM LIKES
+		WHERE MEMNUM=#{memNum} AND CLASSNUM=#{classNum}
+	</delete>
+  
+  	<!-- like class 가져오기 -->
+	<select id="getLikeClassList" parameterType="bit.com.a.dto.likeClassParam" resultType="bit.com.a.dto.onedayClassDto">
+		SELECT B.RNUM, B.CLASSNUM AS CLASSNUM, INSTRUCTOR, MASTERNUM, TITLE, IMAGE1, ENDDATE, SECONDARYCATEGORY, PRIMARYCATEGORY, PRICE, EMAIL, PROFILEPIC, AVGPOINT
+		FROM ACLAPMEMBER A,
+		     (SELECT ROW_NUMBER()OVER(ORDER BY O.STARTDATE) AS RNUM, O.CLASSNUM AS CLASSNUM, INSTRUCTOR, MASTERNUM, TITLE, IMAGE1, STARTDATE, ENDDATE, SECONDARYCATEGORY, PRIMARYCATEGORY, PRICE
+			  FROM LIKES L, ACLAPMEMBER A, ONEDAYCLASS O
+			  WHERE L.MEMNUM = A.MEMNUM AND L.CLASSNUM = O.CLASSNUM AND A.MEMNUM=#{memNum}
+			  ORDER BY O.STARTDATE) B,  
+			 (SELECT R.CLASSNUM AS CLASSNUM, AVG(STARPOINT) AS AVGPOINT
+			  FROM REVIEW R, ONEDAYCLASS N
+			  WHERE R.CLASSNUM = N.CLASSNUM AND R.MEMNUM != 1 
+			  GROUP BY R.CLASSNUM) S
+		WHERE A.MEMNUM = B.MASTERNUM AND S.CLASSNUM = B.CLASSNUM AND B.RNUM BETWEEN #{start} AND #{end}
+		ORDER BY B.RNUM
+	</select>
+
+	<!-- like Class 글의 총 수 구하기 --> 
+	<select id="getLikeClassCount" parameterType="bit.com.a.dto.likeClassParam" resultType="java.lang.Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM LIKES
+		WHERE MEMNUM=#{memNum}
+	</select>
+	
+  </mapper>

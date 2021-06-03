@@ -1,6 +1,8 @@
 package bit.com.a.dto;
 
-public class BlogSearchDto {
+import java.io.Serializable;
+
+public class BlogSearchDto implements Serializable{
 	private String title;
 	private String url;
 	public String getTitle() {

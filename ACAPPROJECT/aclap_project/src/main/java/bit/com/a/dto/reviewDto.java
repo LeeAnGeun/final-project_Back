@@ -8,10 +8,10 @@ public class reviewDto {
 	private double starPoint;
 	private String rContent;
 	private String name;
-	private double cleaness;
+	private double cleanness;
 	private double satisfy;
-	private double rcomm;
-	private double rlocation;
+	private double rComm;
+	private double rLocation;
 	private double accuracy;
 	private int del;         // default = 0 
 	private String wDate;
@@ -23,7 +23,7 @@ public class reviewDto {
 	}
 
 	public reviewDto(int reviewSeq, int classNum, int memNum, double starPoint, String rContent, String name,
-			double cleaness, double satisfy, double rcomm, double rlocation, double accuracy, int del, String wDate,
+			double cleanness, double satisfy, double rComm, double rLocation, double accuracy, int del, String wDate,
 			String image1, String image2, String image3) {
 		super();
 		this.reviewSeq = reviewSeq;
@@ -32,19 +32,17 @@ public class reviewDto {
 		this.starPoint = starPoint;
 		this.rContent = rContent;
 		this.name = name;
-		this.cleaness = cleaness;
+		this.cleanness = cleanness;
 		this.satisfy = satisfy;
-		this.rcomm = rcomm;
-		this.rlocation = rlocation;
+		this.rComm = rComm;
+		this.rLocation = rLocation;
 		this.accuracy = accuracy;
 		this.del = del;
 		this.wDate = wDate;
-
 		this.image1 = image1;
 		this.image2 = image2;
 		this.image3 = image3;
 	}
-
 
 	public int getReviewSeq() {
 		return reviewSeq;
@@ -53,7 +51,6 @@ public class reviewDto {
 	public void setReviewSeq(int reviewSeq) {
 		this.reviewSeq = reviewSeq;
 	}
-
 
 	public int getClassNum() {
 		return classNum;
@@ -71,7 +68,6 @@ public class reviewDto {
 		this.memNum = memNum;
 	}
 
-
 	public double getStarPoint() {
 		return starPoint;
 	}
@@ -79,7 +75,6 @@ public class reviewDto {
 	public void setStarPoint(double starPoint) {
 		this.starPoint = starPoint;
 	}
-
 
 	public String getrContent() {
 		return rContent;
@@ -97,12 +92,12 @@ public class reviewDto {
 		this.name = name;
 	}
 
-	public double getCleaness() {
-		return cleaness;
+	public double getCleanness() {
+		return cleanness;
 	}
 
-	public void setCleaness(double cleaness) {
-		this.cleaness = cleaness;
+	public void setCleanness(double cleanness) {
+		this.cleanness = cleanness;
 	}
 
 	public double getSatisfy() {
@@ -113,20 +108,20 @@ public class reviewDto {
 		this.satisfy = satisfy;
 	}
 
-	public double getRcomm() {
-		return rcomm;
+	public double getrComm() {
+		return rComm;
 	}
 
-	public void setRcomm(double rcomm) {
-		this.rcomm = rcomm;
+	public void setrComm(double rComm) {
+		this.rComm = rComm;
 	}
 
-	public double getRlocation() {
-		return rlocation;
+	public double getrLocation() {
+		return rLocation;
 	}
 
-	public void setRlocation(double rlocation) {
-		this.rlocation = rlocation;
+	public void setrLocation(double rLocation) {
+		this.rLocation = rLocation;
 	}
 
 	public double getAccuracy() {
@@ -180,9 +175,10 @@ public class reviewDto {
 	@Override
 	public String toString() {
 		return "reviewDto [reviewSeq=" + reviewSeq + ", classNum=" + classNum + ", memNum=" + memNum + ", starPoint="
-				+ starPoint + ", rContent=" + rContent + ", name=" + name + ", cleaness=" + cleaness + ", satisfy="
-				+ satisfy + ", rcomm=" + rcomm + ", rlocation=" + rlocation + ", accuracy=" + accuracy + ", del=" + del
+				+ starPoint + ", rContent=" + rContent + ", name=" + name + ", cleanness=" + cleanness + ", satisfy="
+				+ satisfy + ", rComm=" + rComm + ", rLocation=" + rLocation + ", accuracy=" + accuracy + ", del=" + del
 				+ ", wDate=" + wDate + ", image1=" + image1 + ", image2=" + image2 + ", image3=" + image3 + "]";
 	}
+
 }
 

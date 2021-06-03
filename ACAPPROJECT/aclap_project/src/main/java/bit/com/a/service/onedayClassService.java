@@ -17,6 +17,7 @@ import bit.com.a.dto.myStampDto;
 
 import bit.com.a.dto.onedayClassDto;
 import bit.com.a.dto.onedayParam;
+import bit.com.a.dto.participateDto;
 
 @Service
 @Transactional
@@ -30,6 +31,11 @@ public class onedayClassService {
 	//  System.out.println(par.getName() + par.getPage());
 		
 		return onedayClassDao.getClassList(par);
+	}
+	
+	// 멤버가 만든 클래스 count
+	public int masterClassCounter(aclapMemberDto dto) {
+		return onedayClassDao.masterClassCounter(dto);
 	}
 	
 	/*
@@ -61,7 +67,7 @@ public class onedayClassService {
 	}
 	
 
-	
+	//----------------------------categoryView-------------------------
 	//클래스 리스트 뽑아
 	public List<onedayClassDto> classListData(oneDayClassParam param) {
 		return onedayClassDao.classListData(param);
@@ -78,6 +84,12 @@ public class onedayClassService {
 	public List<onedayClassDto> getBestClassList() {
 		return onedayClassDao.getBestClassList();
 	};
+	
+	// home : 추천 클래스 출력
+	public List<onedayClassDto> getRecommendClassList(aclapMemberDto dto){
+		return onedayClassDao.getRecommendClassList(dto);
+	};
+
 
 	// 원데이클래스 생성
 	public int onedayClassWrite(onedayClassDto dto) {
@@ -87,4 +99,9 @@ public class onedayClassService {
 		List<Integer> classSeq = onedayClassDao.onedayClassWriteAfClassNum(dto);
 		return classSeq.get(0);
 	};		
+	
+	// 참여자 수를 NewRegNum에 update
+	public int updateNewRegNum(participateDto dto) {
+		return onedayClassDao.updateNewRegNum(dto);
+	}
 }

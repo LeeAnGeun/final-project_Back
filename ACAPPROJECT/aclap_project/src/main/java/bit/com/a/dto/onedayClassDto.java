@@ -30,6 +30,7 @@ public class onedayClassDto {
 	   private String layerSelect; //이미지 레이어 타입 ("A", "B", "C")
 	   
 	   private String profilePic; // master의 프로필 사진 
+	   private String email;	// master의 이메일
 	   private int avgPoint; 
 	   
 	   public onedayClassDto() {
@@ -259,6 +260,14 @@ public class onedayClassDto {
 		this.profilePic = profilePic;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	public int getAvgPoint() {
 		return avgPoint;
 	}
@@ -271,7 +280,8 @@ public class onedayClassDto {
 			String secondaryCategory, String title, String content, String startDate, String endDate, int price,
 			String information, String duration, String limitNum, String preparation, String aboutMe, String image1,
 			String image2, String image3, String image4, String image5, String location, String youtubeLink,
-			int likeCount, int del, int oldRegNum, int newRegNum, String layerSelect, String profilePic, int avgPoint) {
+			int likeCount, int del, int oldRegNum, int newRegNum, String layerSelect, String profilePic, String email,
+			int avgPoint) {
 		super();
 		this.classNum = classNum;
 		this.masterNum = masterNum;
@@ -301,6 +311,7 @@ public class onedayClassDto {
 		this.newRegNum = newRegNum;
 		this.layerSelect = layerSelect;
 		this.profilePic = profilePic;
+		this.email = email;
 		this.avgPoint = avgPoint;
 	}
 
@@ -314,9 +325,7 @@ public class onedayClassDto {
 				+ ", image3=" + image3 + ", image4=" + image4 + ", image5=" + image5 + ", location=" + location
 				+ ", youtubeLink=" + youtubeLink + ", likeCount=" + likeCount + ", del=" + del + ", oldRegNum="
 				+ oldRegNum + ", newRegNum=" + newRegNum + ", layerSelect=" + layerSelect + ", profilePic=" + profilePic
-				+ ", avgPoint=" + avgPoint + "]";
+				+ ", email=" + email + ", avgPoint=" + avgPoint + "]";
 	}
-
-
 	
 }

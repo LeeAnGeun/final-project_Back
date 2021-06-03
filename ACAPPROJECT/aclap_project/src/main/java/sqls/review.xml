@@ -20,5 +20,37 @@
 		VALUES (SEQ_REVIEW.NEXTVAL, #{classNum}, #{memNum}, 0, #{rContent}, #{name}, #{cleanness}, #{satisfy}, #{rComm}, #{rLocation}, #{accuracy}, 0, #{image1}, #{image2}, #{image3}, SYSDATE)   
    </insert>
    
+   <!-- 리뷰 리스트  -->
+   <select id="getReviewList" parameterType="bit.com.a.dto.reviewDto" resultType="bit.com.a.dto.reviewDto">
+   		SELECT * FROM REVIEW WHERE CLASSNUM=#{classNum}
+   </select>
+   
+   <!-- 리뷰 수정 -->
+   <update id="updateReview" parameterType="bit.com.a.dto.reviewDto">
+   		UPDATE REVIEW SET
+		RCONTENT =#{rContent}, CLEANNESS=#{cleanness}, SATISFY=#{satisfy}, RCOMM =#{rComm}, RLOCATION=#{rLocation}, ACCURACY=#{accuracy}, IMAGE1=#{image1}, IMAGE2=#{image2}, IMAGE3=#{image3}   
+		WHERE REVIEWSEQ=#{reviewSeq}
+   </update>
+   
+   <!-- 수정전 보여주는 리뷰 -->
+   <select id="getReview" parameterType="bit.com.a.dto.reviewDto" resultType="bit.com.a.dto.reviewDto">
+   	SELECT * FROM REVIEW WHERE REVIEWSEQ=#{reviewSeq}
+   </select>
+   
+   
+   <!-- 모든 별점 평균 --> 
+   <select id="getRatingAvg" parameterType="java.lang.Integer" resultType="_double">
+   		SELECT AVG(STARPOINT) AS AVGPOINT
+		FROM REVIEW R, ONEDAYCLASS O
+ 		WHERE R.CLASSNUM = O.CLASSNUM AND O.CLASSNUM = #{classNum}   		
+   </select>
+   
+   <!--각 항목에 대한 별점 평균 -->
+   <select id="getStarsAvg" parameterType="java.lang.Integer" resultType="bit.com.a.dto.reviewDto">   		
+		SELECT TRUNC(AVG(CLEANNESS), 1) AS CLEANNESS, TRUNC(AVG(SATISFY), 1) AS SATISFY, TRUNC(AVG(RCOMM), 1) AS RCOMM, TRUNC(AVG(RLOCATION), 1) AS RLOCATION, TRUNC(AVG(ACCURACY), 1) AS ACCURACY
+		FROM REVIEW
+		WHERE CLASSNUM = #{classNum}
+   </select>
+   
    </mapper>
 

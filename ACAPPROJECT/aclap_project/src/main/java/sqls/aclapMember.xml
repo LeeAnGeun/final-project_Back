@@ -8,7 +8,7 @@
     <!-- 일반 회원가입 -->
 	<insert id="addMember" parameterType="bit.com.a.dto.aclapMemberDto">
 		INSERT INTO ACLAPMEMBER (MEMNUM, EMAIL, PWD, USERNAME, NICKNAME, PHONENUM, PROFILEPIC, AUTH, CLASSMASTER, MYPOINT)
-		VALUES(SEQ_MEMBER.NEXTVAL, #{email}, #{pwd}, #{userName}, #{nickName}, #{phoneNum}, #{profilePic}, 3, 0, 0)
+		VALUES(SEQ_MEMBER.NEXTVAL, #{email}, #{pwd}, #{userName}, #{nickName}, #{phoneNum}, #{profilePic}, 3, 0, 3000)
 	</insert>
 
 
@@ -94,6 +94,9 @@
 	</update>
 
 	
+	
+
+	
 	<!-- myPoint Update -->
 	<update id="myPointUpdate" parameterType="bit.com.a.dto.aclapMemberDto">		
 		UPDATE ACLAPMEMBER
@@ -111,8 +114,11 @@
 		    
 		WHERE MEMNUM=${memNum}
 	</update>
-	
-
+    
+	<select id="getYourInterest" parameterType="int" resultType="String">
+		SELECT INTEREST1 FROM ACLAPMEMBER WHERE MEMNUM = #{ memNum }
+	</select>
+    
 	<!-- mypage.html에서 나의 정보를 얻어오기위함 -->
 	<select id="myinfo" parameterType="bit.com.a.dto.aclapMemberDto" resultType="bit.com.a.dto.aclapMemberDto">
 		SELECT MEMNUM, EMAIL, PWD, USERNAME, NICKNAME, PHONENUM, INTEREST1, INTEREST2, INTEREST3, PROFILEPIC, AUTH, CLASSMASTER, MYPOINT
@@ -127,6 +133,14 @@
 		WHERE EMAIL=#{email}
 	</update>
 
-
+	<update id="minusMyPoint" parameterType="bit.com.a.dto.participateDto">
+		UPDATE ACLAPMEMBER SET MYPOINT = MYPOINT - #{rPoint} 
+		WHERE MEMNUM = #{memNum}
+	</update>
+    
+	<update id="plusMyPoint" parameterType="bit.com.a.dto.participateDto">
+		UPDATE ACLAPMEMBER SET MYPOINT = MYPOINT + #{rPoint} 
+		WHERE MEMNUM = #{memNum}
+	</update>
 
 </mapper>

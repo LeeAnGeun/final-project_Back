@@ -10,6 +10,7 @@ import bit.com.a.dao.scheduleDao;
 import bit.com.a.dto.classSchedulCount;
 import bit.com.a.dto.classScheduleDto;
 import bit.com.a.dto.onedayClassDto;
+import bit.com.a.dto.participateDto;
 import bit.com.a.dto.scheduleDto;
 
 @Service
@@ -73,4 +74,20 @@ public class scheduleService {
 		return scheduleDao.noDateList(dto);
 	}
 	
+	public int participate(participateDto dto) {
+		// 스케줄 추가
+		int i = scheduleDao.addSchedule(dto);
+		
+		// 스탬프 추가
+		int j = scheduleDao.addStamp(dto);
+		
+		// 영수증 추가
+		int z = scheduleDao.addReceipt(dto);
+		
+		return i*j*z;
+	}
+
+	public participateDto getReceiptData(participateDto dto) {
+		return scheduleDao.getReceiptData(dto);
+	}
 }

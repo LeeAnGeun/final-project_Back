@@ -59,4 +59,24 @@ ORDER BY RDATE
 	ORDER BY RDATE
 </select>
 
+<insert id="addSchedule" parameterType="bit.com.a.dto.participateDto">
+	INSERT INTO SCHEDULE (SCHEDULENUM, RDATE, MEMNUM, CLASSNUM, PARTICIPANTS DEL)
+	VALUES(SEQ_SCHEDULE.NEXTVAL, #{cDate}, #{memNum}, #{classNum}, #{participants}, 0)
+</insert>
+
+<insert id="addStamp" parameterType="bit.com.a.dto.participateDto">
+	INSERT INTO MYSTAMP (MYSTAMPNUM, MEMNUM, CLASSNUM, PRIMARYCATEGORY, SECONDARYCATEGORY, TITLE)
+	VALUES (SEQ_MYSTAMP.NEXTVAL, #{memNum}, #{classNum}, #{primaryCategory}, #{secondaryCategory}, #{title})
+</insert>
+
+<insert id="addReceipt" parameterType="bit.com.a.dto.participateDto">
+	INSERT INTO RECEIPT (RECEIPTNUM, NAME, PRICE, PAYDATE, CLASSDATE, CLASSNUM, MEMNUM, DEL)
+	VALUES  (SEQ_RECEIPT.NEXTVAL, #{name}, #{rPoint}, SYSDATE, #{classDate}, #{classNum}, #{memNum}, 0)
+</insert>
+
+<select id="getReceiptData" parameterType="bit.com.a.dto.participateDto" resultType="bit.com.a.dto.participateDto">
+	SELECT NAME, PRICE AS RPOINT, PAYDATE, CLASSDATE, CLASSNUM, MEMNUM, TITLE
+	FROM RECEIPT R, (SELECT TITLE FROM ONEDAYCLASS WHERE CLASSNUM = #{classNum}) O
+	WHERE CLASSDATE=#{classDate} AND CLASSNUM=#{classNum} AND MEMNUM=#{memNum}
+</select>
 </mapper>

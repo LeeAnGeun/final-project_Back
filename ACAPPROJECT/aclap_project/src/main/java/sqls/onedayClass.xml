@@ -6,11 +6,21 @@
 <mapper namespace="bit.com.a.dao.onedayClassDao">
 
 <select id="getOnedayClass" parameterType="bit.com.a.dto.onedayClassDto" resultType="bit.com.a.dto.onedayClassDto">
-	SELECT CLASSNUM, MASTERNUM, INSTRUCTOR, PRIMARYCATEGORY, SECONDARYCATEGORY, TITLE, CONTENT, STARTDATE, ENDDATE, PRICE, INFORMATION, DURATION, LIMITNUM, PREPARATION,
-		ABOUTME, IMAGE1, IMAGE2, IMAGE3, IMAGE4, IMAGE5, LOCATION, YOUTUBELINK, LIKECOUNT, DEL, OLDREGNUM, NEWREGNUM, A.PROFILEPIC
+	SELECT O.CLASSNUM, MASTERNUM, INSTRUCTOR, PRIMARYCATEGORY, SECONDARYCATEGORY, TITLE, CONTENT, STARTDATE, ENDDATE, PRICE, INFORMATION, DURATION, LIMITNUM, PREPARATION,
+		ABOUTME, IMAGE1, IMAGE2, IMAGE3, IMAGE4, IMAGE5, LOCATION, YOUTUBELINK, LIKECOUNT, DEL, OLDREGNUM, NEWREGNUM, A.PROFILEPIC, A.EMAIL, LAYERSELECT, S.AVGPOINT	
+	FROM ONEDAYCLASS O, ACLAPMEMBER A, (SELECT R.CLASSNUM AS CLASSNUM, AVG(STARPOINT) AS AVGPOINT
+										FROM REVIEW R, ONEDAYCLASS N
+										WHERE R.CLASSNUM = N.CLASSNUM AND R.CLASSNUM = #{classNum}
+										GROUP BY R.CLASSNUM) S
+	WHERE O.MASTERNUM = A.MEMNUM AND S.CLASSNUM = O.CLASSNUM
+		AND O.CLASSNUM = #{classNum}
+</select>
+
+<select id="masterClassCounter" parameterType="bit.com.a.dto.aclapMemberDto" resultType="int"> 
+	SELECT COUNT(*)
 	FROM ONEDAYCLASS O, ACLAPMEMBER A
-	WHERE O.MASTERNUM = A.MEMNUM 
-		AND CLASSNUM = #{classNum}
+	WHERE O.MASTERNUM = A.MEMNUM
+	AND A.EMAIL = #{email}
 </select>
 
 <!-- 클래스 리스트 정렬 -->
@@ -39,39 +49,6 @@ ORDER BY O.LIKECOUNT DESC
 </if>
 
 </select>
-
-<!-- 클래스 리스트 갯수 -->
-
-<select id="classListCount" parameterType="bit.com.a.dto.oneDayClassParam" resultType="int">
-SELECT NVL(COUNT(*), 0) FROM (SELECT R.CLASSNUM, AVG(STARPOINT) AS AVGPOINT
-        FROM REVIEW R, ONEDAYCLASS O
-        WHERE R.CLASSNUM = O.CLASSNUM AND O.PRIMARYCATEGORY = #{primaryCategory}
-        GROUP BY R.CLASSNUM) R, ONEDAYCLASS O
-<if test="choice == null or choice == '' and search == null or search == ''">
-WHERE R.CLASSNUM = O.CLASSNUM
-</if>
-<if test="choice != null and choice != '' and search != null and search != ''">
-
-<if test="choice == 'orderByLike'">
-WHERE R.CLASSNUM = O.CLASSNUM AND O.TITLE LIKE '%'||#{search}||'%'
-ORDER BY O.LIKECOUNT DESC
-</if>
-
-<if test="choice == 'orderByRecent'">
-WHERE R.CLASSNUM = O.CLASSNUM AND O.TITLE LIKE '%'||#{search}||'%'
-ORDER BY O.CLASSNUM DESC
-</if>
-
-<if test="choice == 'orderByAvg'">
-WHERE R.CLASSNUM = O.CLASSNUM AND O.TITLE LIKE '%'||#{search}||'%' 
-ORDER BY AVGPOINT DESC
-</if>
-
-</if>
-
-</select>
-
-
 
 
 
@@ -105,7 +82,6 @@ ORDER BY AVGPOINT DESC
 	WHERE RNUM BETWEEN 1 AND 9
 </select>
 
-
 <!-- home : 클래스 인기순 출력 -->
 <select id="getBestClassList" resultType="bit.com.a.dto.onedayClassDto">
 	SELECT CLASSNUM, INSTRUCTOR, TITLE, IMAGE1, ENDDATE
@@ -116,7 +92,18 @@ ORDER BY AVGPOINT DESC
 	WHERE RNUM BETWEEN 1 AND 9
 </select>
 
-
+<!-- home : 추천 클래스 -->
+<select id="getRecommendClassList" parameterType="bit.com.a.dto.aclapMemberDto" resultType="bit.com.a.dto.onedayClassDto">
+	SELECT CLASSNUM, INSTRUCTOR, TITLE, IMAGE1, ENDDATE, SECONDARYCATEGORY
+	FROM (SELECT ROW_NUMBER()OVER(ORDER BY LIKECOUNT DESC) AS RNUM, 
+				 CLASSNUM, INSTRUCTOR, TITLE, IMAGE1, ENDDATE, SECONDARYCATEGORY
+		  FROM ONEDAYCLASS 
+		  WHERE DEL=0 AND 
+				SECONDARYCATEGORY LIKE '%'||#{interest1}||'%' OR 
+				SECONDARYCATEGORY LIKE '%'||#{interest2}||'%' OR 
+				SECONDARYCATEGORY LIKE '%'||#{interest3}||'%') 
+	WHERE RNUM BETWEEN 1 AND 9
+</select> 
 
 
 <!-- 클래스 만들기 -->
@@ -136,6 +123,9 @@ ORDER BY AVGPOINT DESC
 	WHERE MASTERNUM=#{masterNum} AND INSTRUCTOR=#{instructor} AND TITLE=#{title} AND LOCATION=#{location}
 </select>
 
-
+<update id="updateNewRegNum" parameterType="bit.com.a.dto.participateDto">
+	UPDATE ONEDAYCLASS SET NEWREGNUM = NEWREGNUM + #{joinNum}
+	WHERE CLASSNUM = #{classNum}
+</update>
 
 </mapper>
