@@ -19,12 +19,14 @@ public class reviewDto {
 	private String image2;
 	private String image3;
 	
+	private String profilePic;
+	
 	public reviewDto() {
 	}
 
 	public reviewDto(int reviewSeq, int classNum, int memNum, double starPoint, String rContent, String name,
 			double cleanness, double satisfy, double rComm, double rLocation, double accuracy, int del, String wDate,
-			String image1, String image2, String image3) {
+			String image1, String image2, String image3, String profilePic) {
 		super();
 		this.reviewSeq = reviewSeq;
 		this.classNum = classNum;
@@ -42,6 +44,7 @@ public class reviewDto {
 		this.image1 = image1;
 		this.image2 = image2;
 		this.image3 = image3;
+		this.profilePic = profilePic;
 	}
 
 	public int getReviewSeq() {
@@ -172,13 +175,23 @@ public class reviewDto {
 		this.image3 = image3;
 	}
 
+	public String getProfilePic() {
+		return profilePic;
+	}
+
+	public void setProfilePic(String profilePic) {
+		this.profilePic = profilePic;
+	}
+
 	@Override
 	public String toString() {
 		return "reviewDto [reviewSeq=" + reviewSeq + ", classNum=" + classNum + ", memNum=" + memNum + ", starPoint="
 				+ starPoint + ", rContent=" + rContent + ", name=" + name + ", cleanness=" + cleanness + ", satisfy="
 				+ satisfy + ", rComm=" + rComm + ", rLocation=" + rLocation + ", accuracy=" + accuracy + ", del=" + del
-				+ ", wDate=" + wDate + ", image1=" + image1 + ", image2=" + image2 + ", image3=" + image3 + "]";
+				+ ", wDate=" + wDate + ", image1=" + image1 + ", image2=" + image2 + ", image3=" + image3
+				+ ", profilePic=" + profilePic + "]";
 	}
+
 
 }
 

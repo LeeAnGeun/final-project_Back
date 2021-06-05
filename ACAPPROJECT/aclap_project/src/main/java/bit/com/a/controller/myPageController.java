@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import bit.com.a.dto.aclapMemberDto;
 import bit.com.a.dto.myStampDto;
+import bit.com.a.dto.onedayClassDto;
 import bit.com.a.dto.scheduleDto;
 import bit.com.a.service.aclapMemberService;
 import bit.com.a.service.myPageService;
@@ -93,5 +94,26 @@ public class myPageController {
 		int count = onedayClassService.stampCount(dto);
 		System.out.println("count = " + count);
 		return count;
+	}
+	
+	//내가 개설한 클래스 목록 가져오기~
+	@RequestMapping(value = "/getMyClassList", method = RequestMethod.GET)
+	public List<onedayClassDto> getMyClassList(int masterNum){
+		System.out.println("getMyClassList() 파라미터 멤넘: "+masterNum);
+		List<onedayClassDto> list = onedayClassService.getMyClassList(masterNum);
+		System.out.println("getMyClassList() 결과:"+list.toString());
+		
+		return list;
+		
+	}
+	
+	//내가 개설한 클래스 클릭시 해당 참가자 목록 가져오기
+	@RequestMapping(value = "/getMyClassParticipants", method = RequestMethod.GET)
+	public List<aclapMemberDto> getMyClassParticipants(int classNum){
+		System.out.println("getMyClassParticipants() 파라미터 클래스넘: "+classNum);
+		List<aclapMemberDto> list = onedayClassService.getMyClassParticipants(classNum);
+		System.out.println("getMyClassParticipants() 결과:"+list.toString());
+		return list;
+		
 	}
 }

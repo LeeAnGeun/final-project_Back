@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import bit.com.a.FileUploadUtiles;
 import bit.com.a.RadomPasswordUtil;
 import bit.com.a.dto.aclapMemberDto;
+import bit.com.a.dto.onedayClassDto;
 import bit.com.a.mail.MailSend;
 import bit.com.a.service.aclapMemberService;
 
@@ -118,7 +119,7 @@ public class aclapMemberController {
 		else {
 						
 			String uploadPath = req.getServletContext().getRealPath("/upload"); 	
-			String newFilename = FileUploadUtiles.getNewFilename(f);
+			String newFilename = FileUploadUtiles.getNewFilename(f, 1);
 		 // String newFilename = "sample.png"; 샘플 프로필 이미지 서버 저장용 (서버 생성 시 미리 웹에 저장할 것)
 				
 			String filepath = uploadPath + File.separator + newFilename;
@@ -198,7 +199,7 @@ public class aclapMemberController {
 		else {
 						
 			String uploadPath = req.getServletContext().getRealPath("/upload"); 	
-			String newFilename = FileUploadUtiles.getNewFilename(f);
+			String newFilename = FileUploadUtiles.getNewFilename(f, 1);
 		 // String newFilename = "sample.png"; 샘플 프로필 이미지 서버 저장용 (서버 생성 시 미리 웹에 저장할 것)
 				
 			String filepath = uploadPath + File.separator + newFilename;
@@ -273,6 +274,16 @@ public class aclapMemberController {
 		aclapMemberDto memDto = service.getMemberDto(dto);
 		
 		return memDto;
+	}
+	
+	//로그인시 노티 뱃지 show/hide 체크
+	@RequestMapping(value="/checkAlertBadge", method = {RequestMethod.GET, RequestMethod.POST})
+	public onedayClassDto checkAlertBadge(int memNum) {
+		System.out.println("checkAlertBadge() 메소드 도착 파라미터 확인==" +memNum);
+		onedayClassDto chkBadge = service.checkAlertBadge(memNum);
+		
+		return chkBadge;
+		
 	}
 	
 }

@@ -30,11 +30,20 @@ public interface scheduleDao {
 	// classDtail.html에서 classSchedule을 얻기 위함
 	public List<classScheduleDto> classScheduleList(onedayClassDto dto);
 	
+	// 해당 수업 스케줄 당 참가자를 얻기 위함
+	public List<scheduleDto> classParticipantsList(onedayClassDto dto);
+	
 	// classDtail.html에서 해당 일에 신청자 수를 얻기 위함
 	public List<classSchedulCount> classSchedulCount(onedayClassDto dto);
 	
 	// NOCLASSDATE를 얻기 위함
 	public List<classScheduleDto> noDateList(onedayClassDto dto);
+	
+	// 이미 있는 스케줄인지 검사
+	public int getIncludSchedule(participateDto dto);
+	
+	// 다시 해당일자에 신청할때 업데이트를 위함
+	public int updateSchedule(participateDto dto);
 	
 	// 스케줄 추가
 	public int addSchedule(participateDto dto);
@@ -42,9 +51,20 @@ public interface scheduleDao {
 	// 스탬프 추가
 	public int addStamp(participateDto dto);
 	
+	// 다시 해당일자에 신청할때 영수증 업데이트를 위함
+	public int updateReceipt(participateDto dto);
+	
 	// 영수증 추가
 	public int addReceipt(participateDto dto);
-	
+
 	// 해당 일자 영수증 가져오기
 	public participateDto getReceiptData(participateDto dto);
+
+	public int updateDelSchedule(participateDto dto);
+
+	public int deleteStamp(participateDto dto);
+
+	public int getIncludMember(scheduleDto dto);
+
+
 }

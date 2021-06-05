@@ -59,8 +59,22 @@ public interface onedayClassDao {
 		// 생성한 클래스 seq 가져오기
 		public List<Integer> onedayClassWriteAfClassNum(onedayClassDto dto);
 		
+		// 클래스 수정 전 뿌려줄 모든 정보 
+		public onedayClassDto onedayClassInfo(onedayClassDto dto);
 		
+		// 클래스 수정하기
+		public int onedayClassUpdate(onedayClassDto dto);
+		
+		// 클래스 삭제하기
+		public int onedayClassDelete(onedayClassDto dto);
+		
+
 		
 		// 참여자 수를 NewRegNum에 update
 		public int updateNewRegNum(participateDto dto);
+		
+		//내가 개설한 클래스 정보 가져오기
+		public List<onedayClassDto> getMyClassList(int masterNum);
+		//내가 개설한 클래스 클릭시 참가자 보기
+		public List<aclapMemberDto> getMyClassParticipants(int classNum);
 }

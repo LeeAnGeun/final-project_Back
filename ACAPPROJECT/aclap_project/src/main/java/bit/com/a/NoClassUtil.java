@@ -6,7 +6,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.TreeSet;
 
 public class NoClassUtil {
 	public static List<String> getNoClassList(String SDate, String eDate, String week) {
@@ -30,7 +32,7 @@ public class NoClassUtil {
 			long d = ChronoUnit.DAYS.between(startDate, endDate);
 			
 			while(d>0) {
-				if(ch=='0') 
+				if(ch=='7') 
 					startDate = (LocalDate.of(year, month, date).with(TemporalAdjusters.next(DayOfWeek.SUNDAY))); 
 				else if (ch=='1') 
 					startDate = (LocalDate.of(year, month, date).with(TemporalAdjusters.next(DayOfWeek.MONDAY))); 
@@ -55,5 +57,20 @@ public class NoClassUtil {
 		}
 		return list;
 	}
-
+	
+	// 날짜 -> 요일넘버 
+	public static String getNoclassDayOfWeek(List<String> day) {
+		// 중복제거를 위해 treemap 사용
+		TreeSet<Integer> result = new TreeSet<>();
+		// 최종 String 출력을 위한 StringBuffer
+		StringBuffer sb = new StringBuffer(50);  
+		for(int i=0; i<day.size(); i++) {
+			LocalDate item = LocalDate.parse(day.get(i));
+			result.add(item.getDayOfWeek().getValue());
+		}
+		
+		for (Integer integer : result) 
+			sb.append(integer);
+		return sb.toString();
+	}
 }

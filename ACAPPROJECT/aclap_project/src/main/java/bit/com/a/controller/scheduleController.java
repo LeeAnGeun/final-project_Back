@@ -51,8 +51,9 @@ public class scheduleController {
 		 System.out.println("파라미터 확인: "+memNum); 
 		 List<scheduleDto> list = scheduleService.myclsScheduleData(memNum);
 		  
-		 System.out.println("확인"+list.toString()); return list;
-		  
+		 System.out.println("확인"+list.toString()); 
+		 
+		 return list; 
 	 }
 	
 	// classDtail.html에서 classSchedule을 얻기 위함
@@ -99,7 +100,7 @@ public class scheduleController {
 		int count1 = aclapMemberService.minusMyPoint(dto);
 		System.out.println("count1 = " + count1);
 		
-		// 원데이클래스 오리진 넘버
+		// 원데이클래스 NewRegNum + 1 
 		int count2 = onedayClassService.updateNewRegNum(dto);
 		System.out.println("count2 = " + count2);
 		
@@ -125,11 +126,29 @@ public class scheduleController {
 	public String cancelSchedule(participateDto dto){ 
 		System.out.println("cancelSchedule dto = " + dto.toString());
 		
+		participateDto receipt = scheduleService.getReceiptData(dto);
+		System.out.println("receipt = " + receipt.toString());
 		//포인트 가산
-		int count1 = aclapMemberService.pulsMyPoint(dto);
+		int count1 = aclapMemberService.plusMyPoint(receipt);
+		
+		// 원데이클래스 NewRegNum + 1 
+		int count2 = onedayClassService.updateNewRegNum(dto);
+		System.out.println("count2 = " + count2);
 		
 		// 스탬프, 스케줄
+		int count3 = scheduleService.cancelSchedule(dto);
+		System.out.println("count3 = " + count3);
 		
+
 		return "일정이 취소되었습니다.";
+	}
+	
+	@RequestMapping(value="/getIncludMember", method = {RequestMethod.GET, RequestMethod.POST}) 
+	public int getIncludMember(scheduleDto dto){ 
+		System.out.println("getIncludMember dto = " + dto.toString());
+		
+		int count = scheduleService.getIncludMember(dto);
+		System.out.println("getIncludMember count = " + count);
+		return count;
 	}
 }

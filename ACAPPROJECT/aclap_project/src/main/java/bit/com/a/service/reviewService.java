@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import bit.com.a.dao.reviewDao;
 import bit.com.a.dto.reviewDto;
+import bit.com.a.dto.scheduleDto;
 
 @Service
 @Transactional
@@ -48,6 +49,17 @@ public class reviewService {
 	//리뷰 각 항목 평균
 	public reviewDto getStarsAvg(int classNum) {
 		return reviewDao.getStarsAvg(classNum);
+	}
+	
+	// 수강생 여부 체크
+	public int checkMember(scheduleDto dto) {
+		return reviewDao.checkMember(dto);
+	}
+	
+	// 리뷰 삭제
+	
+	public void reviewDel(reviewDto dto) {
+		reviewDao.reviewDel(dto);
 	}
 
 }

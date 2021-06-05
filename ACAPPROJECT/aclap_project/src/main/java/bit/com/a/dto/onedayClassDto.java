@@ -31,10 +31,20 @@ public class onedayClassDto {
 	   
 	   private String profilePic; // master의 프로필 사진 
 	   private String email;	// master의 이메일
-	   private int avgPoint; 
+	   private double avgPoint; 
 	   
+	   
+	private String noClass;
 	   public onedayClassDto() {
 	   }
+
+	public String getNoClass() {
+		return noClass;
+	}
+
+	public void setNoClass(String noClass) {
+		this.noClass = noClass;
+	}
 
 	public int getClassNum() {
 		return classNum;
@@ -268,20 +278,21 @@ public class onedayClassDto {
 		this.email = email;
 	}
 
-	public int getAvgPoint() {
+	public double getAvgPoint() {
 		return avgPoint;
 	}
 
-	public void setAvgPoint(int avgPoint) {
+	public void setAvgPoint(double avgPoint) {
 		this.avgPoint = avgPoint;
 	}
 
+	
 	public onedayClassDto(int classNum, int masterNum, String instructor, String primaryCategory,
 			String secondaryCategory, String title, String content, String startDate, String endDate, int price,
 			String information, String duration, String limitNum, String preparation, String aboutMe, String image1,
 			String image2, String image3, String image4, String image5, String location, String youtubeLink,
 			int likeCount, int del, int oldRegNum, int newRegNum, String layerSelect, String profilePic, String email,
-			int avgPoint) {
+			double avgPoint, String noClass) {
 		super();
 		this.classNum = classNum;
 		this.masterNum = masterNum;
@@ -313,6 +324,7 @@ public class onedayClassDto {
 		this.profilePic = profilePic;
 		this.email = email;
 		this.avgPoint = avgPoint;
+		this.noClass = noClass;
 	}
 
 	@Override
@@ -325,7 +337,7 @@ public class onedayClassDto {
 				+ ", image3=" + image3 + ", image4=" + image4 + ", image5=" + image5 + ", location=" + location
 				+ ", youtubeLink=" + youtubeLink + ", likeCount=" + likeCount + ", del=" + del + ", oldRegNum="
 				+ oldRegNum + ", newRegNum=" + newRegNum + ", layerSelect=" + layerSelect + ", profilePic=" + profilePic
-				+ ", email=" + email + ", avgPoint=" + avgPoint + "]";
+				+ ", email=" + email + ", avgPoint=" + avgPoint + ", noClass=" + noClass + "]";
 	}
 	
 }

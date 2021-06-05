@@ -12,6 +12,8 @@ public class participateDto {
 	private String title;
 	private int participants;	// 신청한 사람 수
 	
+	
+	
 	public participateDto() {
 	}
 

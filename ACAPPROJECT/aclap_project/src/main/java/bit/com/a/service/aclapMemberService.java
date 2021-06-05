@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import bit.com.a.dao.aclapMemberDao;
 import bit.com.a.dto.aclapMemberDto;
 import bit.com.a.dto.aclapParam;
+import bit.com.a.dto.onedayClassDto;
 import bit.com.a.dto.participateDto;
 import bit.com.a.dto.scheduleDto;
 
@@ -80,8 +81,8 @@ public class aclapMemberService {
 	}
 	
 	// 포인트 가산
-	public int pulsMyPoint(participateDto dto) {
-		return aclapMemberDao.pulsMyPoint(dto);
+	public int plusMyPoint(participateDto dto) {
+		return aclapMemberDao.plusMyPoint(dto);
 	}
 	
 	// 나의 정보 가져오기
@@ -91,5 +92,9 @@ public class aclapMemberService {
 	// 네이버 블로그 크롤링을 위해 매번 관심사 조사해서 받아주기 위한것
 	public String getYourInterest(int seq) {
 		return aclapMemberDao.getYourInterest(seq);
+	}
+	//노티뱃지 유무 확인 
+	public onedayClassDto checkAlertBadge(int memNum) {
+		return aclapMemberDao.checkAlertBadge(memNum);
 	}
 }

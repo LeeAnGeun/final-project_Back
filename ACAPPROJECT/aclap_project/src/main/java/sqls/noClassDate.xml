@@ -10,5 +10,18 @@
 		INSERT INTO NOCLASSDATE (NOCLASSDATENUM, CLASSNUM, NOCLASSDATE)
 		VALUES(SEQ_NOCLASSDATE.NEXTVAL, #{classNum}, #{noClassDate})
 	</insert>
-  
+	
+	<!-- NoClass 가져오기 -->
+	<select id="getNoClassDate" parameterType="bit.com.a.dto.onedayClassDto" resultType='java.lang.String'>
+		SELECT NOCLASSDATE
+		FROM NOCLASSDATE
+		WHERE CLASSNUM = #{classNum}
+	</select>
+		
+	<!-- NoClass 삭제 -->
+	<delete id= "deleteNoClassDate" parameterType="bit.com.a.dto.noClassDateDto">
+		DELETE FROM NOCLASSDATE
+		WHERE CLASSNUM=#{classNum}
+	</delete>
+
   </mapper>

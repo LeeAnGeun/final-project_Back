@@ -1,5 +1,6 @@
 package bit.com.a.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +12,14 @@ import bit.com.a.dto.likeClassParam;
 import bit.com.a.dto.likesDto;
 import bit.com.a.dto.onedayClassDto;
 import bit.com.a.service.likesService;
+import bit.com.a.service.reviewService;
 
 @RestController
 public class likesController {
 	@Autowired
 	likesService likesService;
-	
+	@Autowired
+	reviewService reviewService;
 	
 
 	// like 유무 체크 : like == true
@@ -69,7 +72,7 @@ public class likesController {
 	
 	// myPage : like Class List 불러오기
 	@RequestMapping(value="/getLikeClassList", method = {RequestMethod.GET, RequestMethod.POST})
-	public int getLikeClassList(likeClassParam param){
+	public List<onedayClassDto> getLikeClassList(likeClassParam param){
 		System.out.println("/////////////// likesController getLikeClassList() ///////////////");
 		System.out.println("memNum : "+param.getMemNum());
 		System.out.println("page : "+param.getPage());
@@ -82,12 +85,51 @@ public class likesController {
 		param.setStart(start);
 		param.setEnd(end);
 		
-		List<onedayClassDto> list = likesService.getLikeClassList(param);
-		System.out.println("가져온 리스트 : "+list.size());
+		// 클래스 + 클래스 개설자 정보 가져오기 
+		List<onedayClassDto> classList = likesService.getLikeClassList(param);
+		
+		// 각각의 변수를 List에 담기 
+		List <Integer> classNum = new ArrayList<>();
+		List <String> profilePic = new ArrayList<>();
+		List <String> instructor = new ArrayList<>();
+		List <String> email = new ArrayList<>();
+		List <String> title = new ArrayList<>();
+		List <String> primaryCategory = new ArrayList<>();
+		List <Integer> price = new ArrayList<>();
+		List <Double> avgPoint = new ArrayList<>();
+		
+		for(int i=0; i<classList.size(); i++) {
+			onedayClassDto dto = classList.get(i);
+			
+			classNum.add(dto.getClassNum());
+			profilePic.add(dto.getProfilePic());
+			instructor.add(dto.getInstructor());
+			email.add(dto.getEmail());
+			title.add(dto.getTitle());
+			primaryCategory.add(dto.getPrimaryCategory());
+			price.add(dto.getPrice());
+			// 별점 받아오기 
+			avgPoint.add(reviewService.getRatingAvg(dto.getClassNum()));
+		}
 		
 		
-		if(list.size() != 0)
+		// Result List에 담기 
+		List <onedayClassDto> result = new ArrayList<>();
+		for(int i=0; i<classList.size(); i++) {
+			onedayClassDto dto = new onedayClassDto();
+			dto.setClassNum(classNum.get(i));
+			dto.setProfilePic(profilePic.get(i));
+			dto.setInstructor(instructor.get(i));
+			dto.setEmail(email.get(i));
+			dto.setTitle(title.get(i));
+			dto.setPrimaryCategory(primaryCategory.get(i));
+			dto.setPrice(price.get(i));
+			dto.setAvgPoint(avgPoint.get(i));
+			result.add(dto);
+		}
+		
+		if(result.size() != 0)
 			System.out.println("getLikeClassList success!");
-		return 0;
+		return result;
 	}
 }

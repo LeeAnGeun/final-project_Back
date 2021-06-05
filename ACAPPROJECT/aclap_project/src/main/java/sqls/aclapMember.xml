@@ -142,5 +142,10 @@
 		UPDATE ACLAPMEMBER SET MYPOINT = MYPOINT + #{rPoint} 
 		WHERE MEMNUM = #{memNum}
 	</update>
-
+	
+	<select id="checkAlertBadge" parameterType="int" resultType="bit.com.a.dto.onedayClassDto">
+		SELECT OLDREGNUM, NEWREGNUM
+   		FROM ONEDAYCLASS O, ACLAPMEMBER A
+    	WHERE O.MASTERNUM = #{memNum}
+	</select>
 </mapper>

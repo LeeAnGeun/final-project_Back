@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 
 import bit.com.a.dto.reviewDto;
+import bit.com.a.dto.scheduleDto;
 
 
 @Mapper
@@ -18,6 +19,7 @@ public interface reviewDao {
 
 	// 리뷰쓰기 
 	boolean writeReview (reviewDto dto);
+	
 	// 리뷰 리스트 가져오기
 	public List<reviewDto> getReviewList(reviewDto dto);
 	
@@ -30,4 +32,8 @@ public interface reviewDao {
 	public double getRatingAvg(int classNum);
 
 	public reviewDto getStarsAvg(int classNum);
+
+	public int checkMember(scheduleDto dto);
+
+	public void reviewDel(reviewDto dto);
 }
