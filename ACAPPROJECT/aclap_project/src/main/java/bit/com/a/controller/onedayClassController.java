@@ -535,12 +535,12 @@ public class onedayClassController {
 	@RequestMapping(value = "/onedayClassDelete", method = { RequestMethod.GET, RequestMethod.POST })
 	public boolean onedayClassDelete(onedayClassDto dto) {
 		System.out.println("////////// onedayClassDto onedayClassDelete() //////////");
-
+		System.out.println("/// 삭제할 classNum : "+dto.getClassNum() + " ///");
 		boolean result = false;
 		int n = onedayClassService.onedayClassDelete(dto);
 		if(n>0)
 			result = true;
-		return false;
+		return result;
 	}
 	
 }

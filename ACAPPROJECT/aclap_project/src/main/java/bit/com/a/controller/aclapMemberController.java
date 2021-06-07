@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -278,9 +279,16 @@ public class aclapMemberController {
 	
 	//로그인시 노티 뱃지 show/hide 체크
 	@RequestMapping(value="/checkAlertBadge", method = {RequestMethod.GET, RequestMethod.POST})
-	public onedayClassDto checkAlertBadge(int memNum) {
+	public List<onedayClassDto> checkAlertBadge(int memNum) {
 		System.out.println("checkAlertBadge() 메소드 도착 파라미터 확인==" +memNum);
-		onedayClassDto chkBadge = service.checkAlertBadge(memNum);
+		List<onedayClassDto> chkBadge = service.checkAlertBadge(memNum);
+		
+		for(int i=0; i < chkBadge.size(); i++) {
+			onedayClassDto dto = chkBadge.get(i);
+			System.out.println("뱃지뜨게하기 결과 확인하기: oldNum "+dto.getOldRegNum());
+			System.out.println("");
+			System.err.println("뱃지뜨게하기 결과 확인하기: newNum "+dto.getNewRegNum());
+		}
 		
 		return chkBadge;
 		

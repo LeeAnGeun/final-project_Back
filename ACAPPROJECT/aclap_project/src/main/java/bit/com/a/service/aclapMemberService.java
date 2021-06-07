@@ -94,7 +94,7 @@ public class aclapMemberService {
 		return aclapMemberDao.getYourInterest(seq);
 	}
 	//노티뱃지 유무 확인 
-	public onedayClassDto checkAlertBadge(int memNum) {
+	public List<onedayClassDto> checkAlertBadge(int memNum) {
 		return aclapMemberDao.checkAlertBadge(memNum);
 	}
 }

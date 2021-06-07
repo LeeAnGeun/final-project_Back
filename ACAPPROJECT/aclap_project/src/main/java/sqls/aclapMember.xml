@@ -145,7 +145,7 @@
 	
 	<select id="checkAlertBadge" parameterType="int" resultType="bit.com.a.dto.onedayClassDto">
 		SELECT OLDREGNUM, NEWREGNUM
-   		FROM ONEDAYCLASS O, ACLAPMEMBER A
-    	WHERE O.MASTERNUM = #{memNum}
+   		FROM ONEDAYCLASS O
+    	WHERE O.MASTERNUM = (SELECT MEMNUM FROM ACLAPMEMBER WHERE MEMNUM=#{memNum})
 	</select>
 </mapper>

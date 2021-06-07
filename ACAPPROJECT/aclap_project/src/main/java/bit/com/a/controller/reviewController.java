@@ -61,8 +61,7 @@ public class reviewController {
 			        
 			        filenames.add(myPath + newFilename);		        
 			        System.out.println(originalName);		 
-			        
-			        
+			        			        
 			        BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(new File(filepath)));
 					os.write(file.getBytes());
 					os.close();

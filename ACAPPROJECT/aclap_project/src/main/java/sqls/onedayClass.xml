@@ -35,16 +35,26 @@ FROM (SELECT R.CLASSNUM, AVG(STARPOINT) AS AVGPOINT
         GROUP BY R.CLASSNUM) R, ONEDAYCLASS O
 
 <if test="choice == null or choice == '' and search == null or search == ''">
-WHERE R.CLASSNUM = O.CLASSNUM
+WHERE R.CLASSNUM = O.CLASSNUM AND O.DEL=0 AND O.ENDDATE > SYSDATE 
 ORDER BY O.LIKECOUNT DESC 
 </if>
-<if test="choice != null and choice != '' and search != null and search != ''">
+<if test="choice != null and choice != '' and search != null or search ==''">
 
-<if test="choice == 'orderByLike'">WHERE R.CLASSNUM = O.CLASSNUM AND O.TITLE LIKE '%'||#{search}||'%' ORDER BY O.LIKECOUNT DESC</if>
+<if test="choice == 'orderByLike'">
+WHERE R.CLASSNUM = O.CLASSNUM AND O.TITLE LIKE '%'||#{search}||'%' AND O.DEL=0 AND O.ENDDATE > SYSDATE 
+ORDER BY O.LIKECOUNT DESC</if>
 
-<if test="choice == 'orderByRecent'">WHERE R.CLASSNUM = O.CLASSNUM AND O.TITLE LIKE '%'||#{search}||'%' ORDER BY O.CLASSNUM DESC</if>
+<if test="choice == 'orderByRecent'">
+WHERE R.CLASSNUM = O.CLASSNUM AND O.TITLE LIKE '%'||#{search}||'%' 
+AND O.DEL=0 AND O.ENDDATE > SYSDATE 
+ORDER BY O.CLASSNUM DESC</if>
 
-<if test="choice == 'orderByAvg'">WHERE R.CLASSNUM = O.CLASSNUM AND O.TITLE LIKE '%'||#{search}||'%' ORDER BY AVGPOINT DESC </if>
+<if test="choice == 'orderByAvg'">
+WHERE R.CLASSNUM = O.CLASSNUM AND O.TITLE LIKE '%'||#{search}||'%'
+AND O.DEL=0 AND O.ENDDATE > SYSDATE 
+ORDER BY AVGPOINT DESC 
+
+</if>
 
 </if>
 
@@ -176,4 +186,10 @@ SELECT RDATE, PARTICIPANTS, USERNAME AS NAME, NICKNAME, PROFILEPIC, EMAIL
 FROM SCHEDULE S, ACLAPMEMBER A
 WHERE S.DEL =0 AND S.MEMNUM = A.MEMNUM AND S.CLASSNUM=#{classNum}
 </select>
+
+<!-- 내가 개설한 클래스 클릭시 OldRegNum을 NewRegNum과 동일한 값으로 update -->
+<update id="updateOldRegNum" parameterType="int">
+	UPDATE ONEDAYCLASS SET OLDREGNUM = NEWREGNUM
+	WHERE CLASSNUM = #{classNum}
+</update>
 </mapper>
