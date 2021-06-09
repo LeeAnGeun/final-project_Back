@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import bit.com.a.dto.likeClassParam;
 import bit.com.a.dto.likesDto;
 import bit.com.a.dto.onedayClassDto;
+import bit.com.a.dto.reviewDto;
 import bit.com.a.service.likesService;
 import bit.com.a.service.reviewService;
 
@@ -79,8 +80,6 @@ public class likesController {
 		
 		int start = param.getPage() * 5 + 1;
 		int end = (param.getPage()+1) * 5 ;
-		System.out.println("Start : " + start);
-		System.out.println("End : " + end);
 		
 		param.setStart(start);
 		param.setEnd(end);
@@ -108,8 +107,14 @@ public class likesController {
 			title.add(dto.getTitle());
 			primaryCategory.add(dto.getPrimaryCategory());
 			price.add(dto.getPrice());
-			// 별점 받아오기 
-			avgPoint.add(reviewService.getRatingAvg(dto.getClassNum()));
+			
+			reviewDto rDto = new reviewDto();
+			rDto.setClassNum(dto.getClassNum());
+			List <reviewDto> check = reviewService.getReviewList(rDto);
+			if(check.size()==0) 
+				avgPoint.add(0.0);
+			else 
+				avgPoint.add(reviewService.getRatingAvg(dto.getClassNum()));
 		}
 		
 		

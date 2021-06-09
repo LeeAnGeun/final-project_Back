@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="bit.com.a.dao.scheduleDao" >
+ 
+<!-- mypage.html 에서 해당 월에 schedule을 얻어오기 위함 -->
+<select resultType="bit.com.a.dto.scheduleDto" parameterType="bit.com.a.dto.scheduleDto" id="getMySchedule">
+	SELECT SCHEDULENUM, RDATE, MEMNUM, S.CLASSNUM, S.DEL, O.INSTRUCTOR, O.TITLE, O.INFORMATION
+	FROM SCHEDULE S, ONEDAYCLASS O
+	WHERE S.CLASSNUM = O.CLASSNUM AND MEMNUM=#{ memNum } AND SUBSTR(RDATE, 1, 7)=#{ rdate } ORDER BY RDATE ASC 
+</select>
+
+<!-- mypage.html에서 master에 schedule을 얻어오기 위함 -->
+<select id="myclsScheduleData" parameterType="Integer" resultType="bit.com.a.dto.scheduleDto">
+	SELECT  S.RDATE as RDATE, S.SCHEDULENUM AS SCHEDULENUM, M.USERNAME AS NAME, S.CLASSNUM AS CLASSNUM, O.TITLE AS TITLE 
+	FROM SCHEDULE S, ONEDAYCLASS O, ACLAPMEMBER M
+	WHERE S.CLASSNUM = O.CLASSNUM AND #{memNum} = O.MASTERNUM AND M.MEMNUM = S.MEMNUM AND S.DEL = 0
+</select>
+
+<!-- mypage.html에서 신청한 수업 count -->
+<select resultType="Integer" parameterType="bit.com.a.dto.scheduleDto" id="regiCount">
+	SELECT COUNT(*)
+	FROM SCHEDULE
+	WHERE RDATE &gt;= #{ rdate } AND MEMNUM = #{memNum} AND DEL != 1
+</select>
+
+<!-- mypage.html에서 수강한 수업 count -->
+<select resultType="Integer" parameterType="bit.com.a.dto.scheduleDto" id="appendCount">
+	SELECT COUNT(*)
+	FROM SCHEDULE
+	WHERE RDATE &lt; #{ rdate } AND MEMNUM = #{memNum} AND DEL != 1
+</select>
+
+<!-- classDtail.html에서 classSchedule을 얻기 위함 nodate 제외-->
+<select id="classScheduleList" parameterType="bit.com.a.dto.onedayClassDto" resultType="bit.com.a.dto.classScheduleDto">
+SELECT YMD AS RDATE, PRICE, DURATION, LIMITNUM
+FROM (  SELECT TO_DATE (#{startDate})+(LEVEL) YMD
+        FROM DUAL
+        CONNECT BY TO_DATE (#{startDate})+(LEVEL) &lt;= TO_DATE (#{endDate}) ) D, ONEDAYCLASS O
+WHERE YMD NOT IN (SELECT NOCLASSDATE FROM NOCLASSDATE WHERE CLASSNUM=#{classNum}) AND O.CLASSNUM = #{classNum}
+ORDER BY RDATE
+</select>
+
+<!-- 해당 수업 스케줄 당 참가자를 얻기 위함 -->
+<select id="classParticipantsList" parameterType="bit.com.a.dto.onedayClassDto" resultType="bit.com.a.dto.scheduleDto">
+	SELECT SCHEDULENUM, RDATE, PARTICIPANTS, DEL
+	FROM SCHEDULE
+	WHERE CLASSNUM = #{classNum} AND DEL != 1
+</select>
+
+<!-- classDtail.html에서 해당 일에 신청자 수를 얻기 위함  -->
+<select id="classSchedulCount" parameterType="bit.com.a.dto.onedayClassDto" resultType="bit.com.a.dto.classSchedulCount">
+	SELECT COUNT(*) AS COUNT, RDATE
+	FROM SCHEDULE
+	WHERE CLASSNUM = #{classNum} AND DEL != 1
+	GROUP BY RDATE
+	ORDER BY RDATE
+</select>
+
+<select id="noDateList" parameterType="bit.com.a.dto.onedayClassDto" resultType="bit.com.a.dto.classScheduleDto">
+	SELECT NOCLASSDATE AS RDATE
+	FROM NOCLASSDATE 
+	WHERE CLASSNUM = #{classNum}
+	ORDER BY RDATE
+</select>
+
+<!-- 이미 한번 신청한 일자인지 검사 -->
+<select id="getIncludSchedule" parameterType="bit.com.a.dto.participateDto" resultType="int">
+	SELECT COUNT(*)
+	FROM SCHEDULE
+	WHERE CLASSNUM = #{classNum}
+			 AND MEMNUM = #{memNum}
+				AND RDATE = #{classDate}
+</select>
+
+<!-- 이미 한번 신청한 사람이 다시 신청할 경우 del과 인원수 업데이트 -->
+<update id="updateSchedule" parameterType="bit.com.a.dto.participateDto">
+	UPDATE SCHEDULE
+	SET DEL = 0, PARTICIPANTS=#{participants}
+	WHERE RDATE=#{classDate} AND CLASSNUM=#{classNum} AND MEMNUM=#{memNum}  
+</update>
+
+<!-- 수업 신청 시 스케줄 추가 -->
+<insert id="addSchedule" parameterType="bit.com.a.dto.participateDto">
+	INSERT INTO SCHEDULE (SCHEDULENUM, RDATE, MEMNUM, CLASSNUM, PARTICIPANTS, DEL)
+	VALUES(SEQ_SCHEDULE.NEXTVAL, #{classDate}, #{memNum}, #{classNum}, #{participants}, 0)
+</insert>
+
+<!-- 수업 신청 시  도장 추가 -->
+<insert id="addStamp" parameterType="bit.com.a.dto.participateDto">
+	INSERT INTO MYSTAMP (MYSTAMPNUM, MEMNUM, CLASSNUM, CLASSDATE, PRIMARYCATEGORY, SECONDARYCATEGORY, TITLE)
+	VALUES (SEQ_MYSTAMP.NEXTVAL, #{memNum}, #{classNum}, #{classDate}, #{primaryCategory}, #{secondaryCategory}, #{title})
+</insert>
+
+<!-- 수업 신청 시  영수증 추가 -->
+<insert id="addReceipt" parameterType="bit.com.a.dto.participateDto">
+	INSERT INTO RECEIPT (RECEIPTNUM, NAME, PRICE, PAYDATE, CLASSDATE, CLASSNUM, MEMNUM, DEL)
+	VALUES  (SEQ_RECEIPT.NEXTVAL, #{name}, #{rPoint}, SYSDATE, #{classDate}, #{classNum}, #{memNum}, 0)
+</insert>
+
+<!-- 해당 신청 날에 영수증 가져오기 -->
+<select id="getReceiptData" parameterType="bit.com.a.dto.participateDto" resultType="bit.com.a.dto.participateDto">
+	SELECT NAME, PRICE AS RPOINT, PAYDATE, CLASSDATE, CLASSNUM, MEMNUM, TITLE
+	FROM RECEIPT R, (SELECT TITLE FROM ONEDAYCLASS WHERE CLASSNUM = #{classNum}) O
+	WHERE CLASSDATE=#{classDate} AND CLASSNUM=#{classNum} AND MEMNUM=#{memNum}
+</select>
+
+<!-- 일정 취소 시 스케줄 del + 1 -->
+<update id="updateDelSchedule" parameterType="bit.com.a.dto.participateDto">
+	UPDATE SCHEDULE
+	SET DEL=DEL+1
+	WHERE RDATE=#{classDate} AND CLASSNUM=#{classNum} AND MEMNUM=#{memNum}  
+</update>
+
+<!-- 일정 취소 시 영수증 삭제 -->
+<update id="updateReceipt" parameterType="bit.com.a.dto.participateDto">
+	UPDATE RECEIPT
+	SET DEL=0, PAYDATE=SYSDATE, PRICE=#{rPoint}
+	WHERE CLASSDATE=#{classDate} AND CLASSNUM=#{classNum} AND MEMNUM=#{memNum} 
+</update>
+
+<!-- 일정 취소 시 도장 삭제 -->
+<delete id="deleteStamp" parameterType="bit.com.a.dto.participateDto">
+	DELETE FROM MYSTAMP 
+	WHERE CLASSDATE=#{classDate} AND CLASSNUM=#{classNum} AND MEMNUM=#{memNum}
+</delete>
+
+<!-- 로그인 한 사람이 해당 일자에 이미 가입했는지 알기 위함 -->
+<select id="getIncludMember" parameterType="bit.com.a.dto.scheduleDto" resultType="int">
+	SELECT COUNT(*)
+	FROM SCHEDULE
+	WHERE CLASSNUM = #{classNum} AND MEMNUM = #{memNum}
+			AND DEL != 1
+				AND RDATE = #{rdate}
+</select>
+
+</mapper>

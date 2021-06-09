@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+  <mapper namespace="bit.com.a.dao.noClassDateDao">
+  
+    <!-- NoClass 등록 -->
+	<insert id="addNoClassDate" parameterType="bit.com.a.dto.noClassDateDto">
+		INSERT INTO NOCLASSDATE (NOCLASSDATENUM, CLASSNUM, NOCLASSDATE)
+		VALUES(SEQ_NOCLASSDATE.NEXTVAL, #{classNum}, #{noClassDate})
+	</insert>
+	
+	<!-- NoClass 가져오기 -->
+	<select id="getNoClassDate" parameterType="bit.com.a.dto.onedayClassDto" resultType='java.lang.String'>
+		SELECT NOCLASSDATE
+		FROM NOCLASSDATE
+		WHERE CLASSNUM = #{classNum}
+	</select>
+		
+	<!-- NoClass 삭제 -->
+	<delete id= "deleteNoClassDate" parameterType="bit.com.a.dto.noClassDateDto">
+		DELETE FROM NOCLASSDATE
+		WHERE CLASSNUM=#{classNum}
+	</delete>
+
+  </mapper>

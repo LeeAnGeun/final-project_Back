@@ -115,13 +115,22 @@ public class onedayClassService {
 		return onedayClassDao.onedayClassInfo(dto);
 	};
 	
-	// 클래스 삭제하기
+	// 클래스 중단하기
 	public int onedayClassDelete(onedayClassDto dto) {
 		int n = onedayClassDao.onedayClassDelete(dto);
 		if(n>0)
 			System.out.println("=== onedayClassDelete Success ===");
 		return n;
 	};
+	
+	// 클래스 삭제 
+	public int onedayClassMasterDel(int classNum) {
+		int n = onedayClassDao.onedayClassMasterDel(classNum);
+		if(n>0)
+			System.out.println("=== onedayClassMasterDel Success ===");
+		return n;
+	};
+
 	
 	
 	

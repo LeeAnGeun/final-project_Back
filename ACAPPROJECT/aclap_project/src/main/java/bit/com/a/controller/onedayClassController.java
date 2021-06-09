@@ -527,11 +527,11 @@ public class onedayClassController {
 	}
 	
 	
-	// 클래스 삭제
+	// 클래스 중단(유저)
 	@RequestMapping(value = "/onedayClassDelete", method = { RequestMethod.GET, RequestMethod.POST })
 	public boolean onedayClassDelete(onedayClassDto dto) {
 		System.out.println("////////// onedayClassDto onedayClassDelete() //////////");
-		System.out.println("/// 삭제할 classNum : "+dto.getClassNum() + " ///");
+		System.out.println("/// 중단할 classNum : "+dto.getClassNum() + " ///");
 		boolean result = false;
 		int n = onedayClassService.onedayClassDelete(dto);
 		if(n>0)
@@ -539,4 +539,15 @@ public class onedayClassController {
 		return result;
 	}
 	
+	// 클래스 삭제 (마스터)
+	@RequestMapping(value = "/onedayClassMasterDel", method = { RequestMethod.GET, RequestMethod.POST })
+	public boolean onedayClassMasterDel(int classNum) {
+		System.out.println("////////// onedayClassDto onedayClassMasterDel() //////////");
+		System.out.println("/// 중단할 classNum : "+classNum+ " ///");
+		boolean result = false;
+		int n = onedayClassService.onedayClassMasterDel(classNum);
+		if(n>0)
+			result = true;
+		return result;
+	}
 }

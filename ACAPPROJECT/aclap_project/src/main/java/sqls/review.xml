@@ -44,7 +44,7 @@
 
    <!-- 모든 별점 평균--> 
    <select id="getRatingAvg" parameterType="java.lang.Integer" resultType="_double">		
-		SELECT TRUNC(AVG((CLEANNESS+SATISFY+RCOMM+RLOCATION+ACCURACY))/5,1)
+		SELECT TRUNC(AVG((CLEANNESS+SATISFY+RCOMM+RLOCATION+ACCURACY))/5, 1)
 		FROM REVIEW
 		WHERE CLASSNUM = #{classNum} AND NOT MEMNUM=1
    </select>

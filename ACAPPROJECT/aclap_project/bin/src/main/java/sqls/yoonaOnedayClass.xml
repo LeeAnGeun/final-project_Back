@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="bit.com.a.dao.onedayClassDao">
+
+<!-- 원데이 클래스 리스트 -->
+<select id="getClassList" parameterType="bit.com.a.dto.onedayParam" resultType="bit.com.a.dto.onedayClassDto">
+SELECT CLASSNUM, INSTRUCTOR, PRIMARYCATEGORY, SECONDARYCATEGORY, TITLE, STARTDATE, ENDDATE, LOCATION
+   FROM (SELECT ROW_NUMBER()OVER(ORDER BY CLASSNUM DESC) AS RNUM, 
+                  CLASSNUM, INSTRUCTOR, PRIMARYCATEGORY, SECONDARYCATEGORY, TITLE, STARTDATE, ENDDATE, LOCATION
+               FROM ONEDAYCLASS
+               WHERE 1=1      
+               AND INSTRUCTOR LIKE '%'||#{name}||'%'            
+            ORDER BY CLASSNUM DESC)
+         WHERE RNUM BETWEEN ${start} AND ${end}
+</select>
+
+<!-- 클래수 총수 -->
+<select id="classCount" parameterType="bit.com.a.dto.onedayParam" resultType="java.lang.Integer">
+		
+	SELECT COUNT(*)
+	FROM ONEDAYCLASS
+	WHERE 1=1
+	AND INSTRUCTOR LIKE '%'||#{name}||'%'
+		
+</select>
+
+
+</mapper>  

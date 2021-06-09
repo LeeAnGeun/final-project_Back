@@ -53,9 +53,7 @@ public class reviewController {
 			    	//이미지 파일 이름
 			        String originalName = file.getOriginalFilename();
 			        String newFilename = FileUploadUtiles.getNewFilename(originalName, 1);
-			        
-			 
-			        
+			        			        
 			        String filepath = uploadPath + File.separator + newFilename;
 			        System.out.println("Img Path : "+ filepath);
 					

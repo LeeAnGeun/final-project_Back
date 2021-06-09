@@ -65,10 +65,11 @@ public interface onedayClassDao {
 		// 클래스 수정하기
 		public int onedayClassUpdate(onedayClassDto dto);
 		
-		// 클래스 삭제하기
+		// 클래스 중단하기
 		public int onedayClassDelete(onedayClassDto dto);
 		
-
+		// 클래스 삭제하기
+		public int onedayClassMasterDel(int classNum);
 		
 		// 참여자 수를 NewRegNum에 update
 		public int updateNewRegNum(participateDto dto);
@@ -82,4 +83,6 @@ public interface onedayClassDao {
 
 		//어드민 페이지 클래스 총수 조사
 		public int classCount(onedayParam par);
+		
+		
 }

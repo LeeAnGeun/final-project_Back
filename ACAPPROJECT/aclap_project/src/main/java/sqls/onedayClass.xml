@@ -65,9 +65,10 @@ ORDER BY O.LIKECOUNT DESC
 <select id="myStampList" parameterType="Map" resultType="bit.com.a.dto.myStampDto">
 	SELECT MYSTAMPNUM, MEMNUM, CLASSNUM, PRIMARYCATEGORY, SECONDARYCATEGORY, TITLE
 	FROM (SELECT ROW_NUMBER()OVER(ORDER BY MYSTAMPNUM ASC) AS RNUM, MYSTAMPNUM, MEMNUM, CLASSNUM, PRIMARYCATEGORY, SECONDARYCATEGORY, TITLE
-		FROM MYSTAMP )  
-	WHERE MEMNUM = #{memNum} AND 
-			RNUM&gt;=1+10*#{ pageNum } AND RNUM&lt;=10+10*#{ pageNum }
+		FROM MYSTAMP 
+		WHERE MEMNUM = #{memNum}
+			AND CLASSDATE &lt;= SYSDATE)  
+	WHERE RNUM&gt;=1+10*#{ pageNum } AND RNUM&lt;=10+10*#{ pageNum }
 </select>
 
 <!-- 도장 갯수 -->
@@ -75,6 +76,7 @@ ORDER BY O.LIKECOUNT DESC
 	SELECT COUNT(*)
 	FROM MYSTAMP
 	WHERE MEMNUM = #{memNum}
+		AND CLASSDATE &lt;= SYSDATE
 </select>
 
 
@@ -147,7 +149,7 @@ ORDER BY O.LIKECOUNT DESC
 <update id="onedayClassUpdate" parameterType="bit.com.a.dto.onedayClassDto">
 		UPDATE ONEDAYCLASS 
 		SET PRIMARYCATEGORY=#{primaryCategory}, SECONDARYCATEGORY=#{secondaryCategory}, TITLE=#{title}, STARTDATE=#{startDate},	ENDDATE=#{endDate}, 
-			PRICE=#{price}, DURATION=#{duration}, LIMITNUM=#{limitNum}, PREPARATION=#{preparation}, ABOUTME=#{aboutMe}, 
+			PRICE=#{price}, DURATION=#{duration}, LIMITNUM=#{limitNum}, PREPARATION=#{preparation}, ABOUTME=#{aboutMe}, DEL=0
 		 	<if test="image1 != null">IMAGE1=#{image1},</if>
 		 	<if test="image2 != null">IMAGE2=#{image2},</if>
 		 	<if test="image3 != null">IMAGE3=#{image3},</if>
@@ -158,13 +160,18 @@ ORDER BY O.LIKECOUNT DESC
 		WHERE CLASSNUM=#{classNum}	
 </update> 
 
-<!-- 클래스 삭제(숨기기) -->
-<update id="onedayClassDelete" parameterType="bit.com.a.dto.participateDto">
+<!-- 클래스 중단(유저) -->
+<update id="onedayClassDelete" parameterType="bit.com.a.dto.onedayClassDto">
 	UPDATE ONEDAYCLASS 
 	SET DEL=1
 	WHERE CLASSNUM = #{classNum}
 </update>
 
+<!-- 클래스 삭제(관리자) -->
+<delete id="onedayClassMasterDel" parameterType="java.lang.Integer">
+	DELETE FROM ONEDAYCLASS
+	WHERE CLASSNUM = #{classNum}
+</delete>
 
 <update id="updateNewRegNum" parameterType="bit.com.a.dto.participateDto">
 	UPDATE ONEDAYCLASS SET NEWREGNUM = NEWREGNUM + 1
@@ -173,7 +180,7 @@ ORDER BY O.LIKECOUNT DESC
 
 <!-- 내가 개설한 클래스 정보 리스트 가져오기 -->
 <select id="getMyClassList" parameterType="int" resultType="bit.com.a.dto.onedayClassDto">
-	SELECT CLASSNUM, TITLE, LIKECOUNT, STARTDATE, ENDDATE
+	SELECT CLASSNUM, TITLE, LIKECOUNT, STARTDATE, ENDDATE, OLDREGNUM, NEWREGNUM, DEL
 	FROM ONEDAYCLASS
 	WHERE MASTERNUM = #{masterNum}
 	ORDER BY CLASSNUM
@@ -184,6 +191,7 @@ ORDER BY O.LIKECOUNT DESC
 SELECT RDATE, PARTICIPANTS, USERNAME AS NAME, NICKNAME, PROFILEPIC, EMAIL 
 FROM SCHEDULE S, ACLAPMEMBER A
 WHERE S.DEL =0 AND S.MEMNUM = A.MEMNUM AND S.CLASSNUM=#{classNum}
+ORDER BY RDATE
 </select>
 
 <!-- 내가 개설한 클래스 클릭시 OldRegNum을 NewRegNum과 동일한 값으로 update -->

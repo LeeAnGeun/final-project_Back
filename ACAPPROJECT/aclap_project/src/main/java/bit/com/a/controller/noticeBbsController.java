@@ -16,7 +16,7 @@ public class noticeBbsController {
 	
 	// 문의 글 쓰기 
 	@RequestMapping(value = "/writeNotisBbs", method = { RequestMethod.GET, RequestMethod.POST })
-	public boolean classListData(noticeBbsDto dto) {
+	public boolean writeNotisBbs(noticeBbsDto dto) {
 		System.out.println("////// noticeBbsController writeNotisBbs() ///////");
 		System.out.println(dto.toString());
 		boolean result = false;
