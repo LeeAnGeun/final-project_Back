@@ -257,14 +257,14 @@ public class aclapMemberController {
 	
 	//------------------------------- 관심사 설정완료~------------------------
 	@RequestMapping(value = "/interestComplete", method = RequestMethod.POST)
-	public void setInterest(String interest1, String interest2, String interest3, int memNum){
+	public int setInterest(String interest1, String interest2, String interest3, int memNum){
 		System.out.println("////////// aclapMemberController setInterest() //////////");
 		
 		System.out.println("파라미터확인 : " + interest1+"&&"+interest2+"&&"+interest3+"&&"+memNum);
 		
 		aclapMemberDto dto = new aclapMemberDto(memNum, interest1, interest2, interest3);
 		service.setInterest(dto);
-		
+		return 1;
 	}
 	
 	// 나의 정보 가져오기

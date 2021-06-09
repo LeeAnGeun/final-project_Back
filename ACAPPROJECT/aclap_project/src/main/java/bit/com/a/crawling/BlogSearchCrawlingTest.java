@@ -15,7 +15,7 @@ public class BlogSearchCrawlingTest {
 			e.printStackTrace();
 		}
 		for (BlogSearchDto dto : list) {
-			System.out.println(dto.getUrl());
+		//	System.out.println(dto.getUrl());
 		}
 	}
 

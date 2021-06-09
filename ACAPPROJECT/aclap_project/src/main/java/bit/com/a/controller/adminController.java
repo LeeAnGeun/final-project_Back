@@ -93,6 +93,8 @@ public class adminController {
 			List<aclapMemberDto> list = aclapMemberService.memlist(par);
 			System.out.println(list.toString());	
 			return list;
+			
+			
 		}
 		
 		//--------------------------------클래스목록--------------------------//
@@ -106,7 +108,7 @@ public class adminController {
 			
 			int sn = par.getPage(); // 0 1 2
 			int start = sn*10+1;       // 1 11 21
-			int end = (sn + 1)*100;	   // 10 20 30 
+			int end = (sn + 1)*10;	   // 10 20 30 
 			
 			par.setStart(start);
 			par.setEnd(end);
@@ -118,14 +120,21 @@ public class adminController {
 			return list;
 		}
 		//--------------------------------클래스 갯수 카운트 리턴--------------------------//
-		/*
+		
 		@RequestMapping(value = "/classCount", method = {RequestMethod.GET, RequestMethod.POST})
 		public int classCount(onedayParam par) {
 			System.out.println("onedayClassController classCount()" + new Date());
-			// int count = onedayClassService.classCount(par);
+			 int count = onedayClassService.classCount(par);
 			return count;
 		}
-		*/
+		
+		@RequestMapping(value = "/userCount", method = {RequestMethod.GET, RequestMethod.POST})
+		public int userCount(onedayParam par) {
+			System.out.println("userCount userCount()" + new Date());
+			int count = aclapMemberService.userCount(par);
+			return count;
+		}
+		
 		
 		
 }

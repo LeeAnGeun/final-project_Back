@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import bit.com.a.dao.noticeBbsDao;
 import bit.com.a.dto.noticeBbsDto;
@@ -34,5 +36,12 @@ public class noticeBbsService {
 		noticeBbsDao.noticeAnswerAf(seq);
 		
 	}
+	
+	public boolean writeNotisBbs(noticeBbsDto dto) {
+		int n= noticeBbsDao.writeNotisBbs(dto);
+		if(n>0)
+			System.out.println("/// noticeBbs write success ///");
+		return true;
+	};
 
 }

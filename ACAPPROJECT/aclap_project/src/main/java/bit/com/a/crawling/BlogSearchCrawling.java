@@ -40,7 +40,7 @@ public class BlogSearchCrawling {
 		String naverUrl = "https://search.naver.com/search.naver?sm=tab_hty.top&where=blog&query=";
 		naverUrl += keyword+"+수업";
 		naverUrl += "&oquery=&tqi=h7l1Mdp0YidssCX9EqVssssst6R-274174";
-		System.out.println(naverUrl.trim());
+	//	System.out.println(naverUrl.trim());
 		// 정보를 저장할 List 생성
 		List<BlogSearchDto> list = new ArrayList<>();
 		
@@ -76,8 +76,8 @@ public class BlogSearchCrawling {
 				String rtitle = content.text();      // text 뽑아오기
 				String rurl = content.attr("href");  // attr 뽑아오기
 				
-				System.out.println(i+1+"제목 : "+rtitle+" url : "+rurl);
-				System.out.println("");
+			//	System.out.println(i+1+"제목 : "+rtitle+" url : "+rurl);
+			//	System.out.println("");
 
 				// 리스트에 담기
 				BlogSearchDto dto = new BlogSearchDto ();

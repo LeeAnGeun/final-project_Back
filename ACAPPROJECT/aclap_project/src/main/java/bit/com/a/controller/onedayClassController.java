@@ -448,14 +448,10 @@ public class onedayClassController {
 			System.out.println("5 = "+filepath5);
 
 			// 업로드한 이미지만 체크해서 DB셋팅 
-			if(!newFilename1.contains(".back")) {
-				System.out.println("1 success");
+			if(!newFilename1.contains(".back")) 
 				dto.setImage1(myPath+newFilename1);
-			}
-			if(!newFilename2.contains(".back")) {
+			if(!newFilename2.contains(".back")) 
 				dto.setImage2(myPath+newFilename2); 
-				System.out.println("2 success");
-			}
 			if(!newFilename3.contains(".back")) 
 				dto.setImage3(myPath+newFilename3);
 			if(!newFilename4.contains(".back")) 

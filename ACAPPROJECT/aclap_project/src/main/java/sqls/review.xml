@@ -24,7 +24,7 @@
    <select id="getReviewList" parameterType="bit.com.a.dto.reviewDto" resultType="bit.com.a.dto.reviewDto">
    		SELECT R.REVIEWSEQ, R.CLASSNUM, R.MEMNUM, R.RCONTENT, R.NAME, R.DEL, R.WDATE, R.IMAGE1, R.IMAGE2, R.IMAGE3, A.PROFILEPIC
 		FROM REVIEW R, ACLAPMEMBER A
-		WHERE R.MEMNUM = A.MEMNUM AND R.CLASSNUM = #{classNum}
+		WHERE R.MEMNUM = A.MEMNUM AND R.CLASSNUM = #{classNum} AND NOT R.MEMNUM =1 AND R.DEL=0
 		ORDER BY WDATE DESC, REVIEWSEQ DESC 
    </select>
    
@@ -37,16 +37,16 @@
    
    <!-- 수정전 보여주는 리뷰 -->
    <select id="getReview" parameterType="bit.com.a.dto.reviewDto" resultType="bit.com.a.dto.reviewDto">
-   	SELECT * FROM REVIEW WHERE REVIEWSEQ=#{reviewSeq}
+   		SELECT * FROM REVIEW WHERE REVIEWSEQ=#{reviewSeq}
    </select>
    
    
 
    <!-- 모든 별점 평균--> 
-   <select id="getRatingAvg" parameterType="java.lang.Integer" resultType="_double">
-	  SELECT NVL(TRUNC(AVG(STARPOINT), 1), 0) AS AVGPOINT
-      FROM REVIEW
-      WHERE CLASSNUM = #{classNum} AND NOT MEMNUM=1		
+   <select id="getRatingAvg" parameterType="java.lang.Integer" resultType="_double">		
+		SELECT TRUNC(AVG((CLEANNESS+SATISFY+RCOMM+RLOCATION+ACCURACY))/5,1)
+		FROM REVIEW
+		WHERE CLASSNUM = #{classNum} AND NOT MEMNUM=1
    </select>
   
    
@@ -54,7 +54,7 @@
    <select id="getStarsAvg" parameterType="java.lang.Integer" resultType="bit.com.a.dto.reviewDto">   		
 		SELECT TRUNC(AVG(CLEANNESS), 1) AS CLEANNESS, TRUNC(AVG(SATISFY), 1) AS SATISFY, TRUNC(AVG(RCOMM), 1) AS RCOMM, TRUNC(AVG(RLOCATION), 1) AS RLOCATION, TRUNC(AVG(ACCURACY), 1) AS ACCURACY
 		FROM REVIEW
-		WHERE CLASSNUM = #{classNum} AND NOT MEMNUM=1
+		WHERE CLASSNUM = #{classNum} AND DEL=0 AND NOT MEMNUM=1
    </select>
    
    <!-- 클래스 신청여부 확인 -->
@@ -62,6 +62,14 @@
 	   	SELECT COUNT(*)
 		FROM SCHEDULE
 		WHERE MEMNUM = #{memNum} AND CLASSNUM = #{classNum}
+			AND RDATE &lt;= SYSDATE
+   </select>
+   
+   <!-- 수강생의 신청한 클래스 갯수 -->
+   <select id="checkReview" parameterType="bit.com.a.dto.scheduleDto" resultType="java.lang.Integer">
+   		SELECT COUNT(*)
+		FROM REVIEW
+		WHERE MEMNUM=#{memNum} AND CLASSNUM = #{classNum}
    </select>
    
    <!-- 리뷰 삭제 -->

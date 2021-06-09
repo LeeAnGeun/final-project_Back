@@ -21,7 +21,7 @@ SELECT CLASSNUM, INSTRUCTOR, PRIMARYCATEGORY, SECONDARYCATEGORY, TITLE, STARTDAT
 <!-- 클래수 총수 -->
 <select id="classCount" parameterType="bit.com.a.dto.onedayParam" resultType="java.lang.Integer">
 		
-	SELECT NVL(COUNT(*),0)
+	SELECT COUNT(*)
 	FROM ONEDAYCLASS
 	WHERE 1=1
 	AND INSTRUCTOR LIKE '%'||#{name}||'%'

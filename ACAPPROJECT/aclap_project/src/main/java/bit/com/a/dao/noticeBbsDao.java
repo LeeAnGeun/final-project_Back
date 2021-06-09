@@ -20,5 +20,5 @@ public interface noticeBbsDao {
 
 	public void noticeAnswerAf(int seq);
 
-	
+	public int writeNotisBbs(noticeBbsDto dto);
 }

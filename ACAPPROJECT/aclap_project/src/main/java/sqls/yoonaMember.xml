@@ -16,4 +16,11 @@ SELECT USERNAME, NICKNAME, CLASSMASTER, MYPOINT, EMAIL, PHONENUM
             ORDER BY MEMNUM DESC)
          WHERE RNUM BETWEEN ${start} AND ${end}
 </select>
+
+<select id ="userCount" parameterType="bit.com.a.dto.aclapParam" resultType="int">
+	SELECT count(*)
+    FROM ACLAPMEMBER
+    WHERE 1=1      
+    	AND USERNAME LIKE '%'||#{name}||'%'            
+</select>
 </mapper>

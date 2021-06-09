@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
-
+import bit.com.a.dto.classSchedulCount;
 import bit.com.a.dto.reviewDto;
 import bit.com.a.dto.scheduleDto;
 
@@ -32,8 +32,10 @@ public interface reviewDao {
 	public double getRatingAvg(int classNum);
 
 	public reviewDto getStarsAvg(int classNum);
-
+	// 수강생 여부 체크
 	public int checkMember(scheduleDto dto);
-
+	// 리뷰 삭제
 	public void reviewDel(reviewDto dto);
+	//수강생의 신청한 클래스 갯수
+	public int checkReview(scheduleDto dto);
 }

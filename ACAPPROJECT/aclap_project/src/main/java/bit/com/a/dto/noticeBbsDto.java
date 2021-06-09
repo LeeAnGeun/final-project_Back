@@ -17,7 +17,6 @@ public class noticeBbsDto implements Serializable{
 	private String nTitle;
 	private String nContent;
 	private String wDate;
-	private String nImg;
 	private int del;
 	private int answer;
 	
@@ -28,7 +27,7 @@ public class noticeBbsDto implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
 
-	public noticeBbsDto(int noticeNum, int memNum, String nTitle, String nContent, String wDate, String nImg, int del,
+	public noticeBbsDto(int noticeNum, int memNum, String nTitle, String nContent, String wDate, int del,
 			int answer, String username, String email) {
 		super();
 		this.noticeNum = noticeNum;
@@ -36,7 +35,6 @@ public class noticeBbsDto implements Serializable{
 		this.nTitle = nTitle;
 		this.nContent = nContent;
 		this.wDate = wDate;
-		this.nImg = nImg;
 		this.del = del;
 		this.answer = answer;
 		this.username = username;
@@ -83,13 +81,6 @@ public class noticeBbsDto implements Serializable{
 		this.wDate = wDate;
 	}
 
-	public String getnImg() {
-		return nImg;
-	}
-
-	public void setnImg(String nImg) {
-		this.nImg = nImg;
-	}
 
 	public int getDel() {
 		return del;
@@ -126,7 +117,7 @@ public class noticeBbsDto implements Serializable{
 	@Override
 	public String toString() {
 		return "noticeBbsDto [noticeNum=" + noticeNum + ", memNum=" + memNum + ", nTitle=" + nTitle + ", nContent="
-				+ nContent + ", wDate=" + wDate + ", nImg=" + nImg + ", del=" + del + ", answer=" + answer
+				+ nContent + ", wDate=" + wDate + ", del=" + del + ", answer=" + answer
 				+ ", username=" + username + ", email=" + email + "]";
 	}
 	

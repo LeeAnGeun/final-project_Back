@@ -8,8 +8,8 @@
 
 
 <select resultType="bit.com.a.dto.noticeBbsDto" parameterType="bit.com.a.dto.noticeBbsParam" id="noticeListData">
-SELECT NOTICENUM, MEMNUM, NTITLE, NCONTENT, WDATE, NIMG, DEL, ANSWER, USERNAME, EMAIL
-FROM (select ROW_NUMBER()OVER(ORDER BY NOTICENUM ASC) AS RNUM, NOTICENUM, N.MEMNUM AS MEMNUM, NTITLE, NCONTENT, WDATE, NIMG, DEL, ANSWER, A.USERNAME AS USERNAME, A.EMAIL AS EMAIL 
+SELECT NOTICENUM, MEMNUM, NTITLE, NCONTENT, WDATE, DEL, ANSWER, USERNAME, EMAIL
+FROM (select ROW_NUMBER()OVER(ORDER BY NOTICENUM ASC) AS RNUM, NOTICENUM, N.MEMNUM AS MEMNUM, NTITLE, NCONTENT, WDATE, DEL, ANSWER, A.USERNAME AS USERNAME, A.EMAIL AS EMAIL 
 from ACLAPMEMBER A, NOTICEBBS N
 WHERE A.MEMNUM = N.MEMNUM 
 
@@ -35,15 +35,15 @@ ORDER BY ANSWER ASC
 
 
 <select resultType="java.lang.Integer" parameterType="bit.com.a.dto.noticeBbsParam" id="noticeListCount">
-SELECT NVL(COUNT(*), 0) FROM NOTICEBBS WHERE 1=1 
-
+SELECT COUNT(*) FROM NOTICEBBS N, ACLAPMEMBER A
+WHERE 1=1 AND A.MEMNUM = N.MEMNUM
 <if test="choice != null and choice != '' and search != null and search != ''">
 
 <if test="choice == 'title'">AND NTITLE LIKE '%'||#{search}||'%' </if>
 
 <if test="choice == 'content'">AND NCONTENT LIKE '%'||#{search}||'%' </if>
 
-<if test="choice == 'writer'">AND USERNAME=#{search} </if>
+<if test="choice == 'writer'">AND A.USERNAME = #{search} </if>
 
 </if>
 
@@ -51,7 +51,7 @@ SELECT NVL(COUNT(*), 0) FROM NOTICEBBS WHERE 1=1
 
 
 <select id="noticeDetail" parameterType="int" resultType="bit.com.a.dto.noticeBbsDto">
-SELECT NOTICENUM, N.MEMNUM AS MEMNUM, NTITLE, NCONTENT, WDATE, NIMG, DEL, ANSWER, A.USERNAME AS USERNAME, A.EMAIL AS EMAIL
+SELECT NOTICENUM, N.MEMNUM AS MEMNUM, NTITLE, NCONTENT, WDATE, DEL, ANSWER, A.USERNAME AS USERNAME, A.EMAIL AS EMAIL
 FROM ACLAPMEMBER A, NOTICEBBS N
 WHERE A.MEMNUM = N.MEMNUM and NOTICENUM=${noticeNum}
 </select>
@@ -60,5 +60,10 @@ WHERE A.MEMNUM = N.MEMNUM and NOTICENUM=${noticeNum}
 UPDATE NOTICEBBS SET ANSWER=ANSWER+1, NTITLE=CONCAT(NTITLE, '(답변완료)') WHERE NOTICENUM=${noticeNum}
 </update>
 
+<!-- 문의 글 쓰기 -->
+<insert id="writeNotisBbs" parameterType="bit.com.a.dto.noticeBbsDto">
+INSERT INTO NOTICEBBS (NOTICENUM, MEMNUM, NTITLE, NCONTENT, WDATE, DEL, ANSWER)
+VALUES (SEQ_NOTICEBBS.NEXTVAL, #{memNum}, #{nTitle}, #{nContent}, SYSDATE, 0, 0)
+</insert>
 
 </mapper>

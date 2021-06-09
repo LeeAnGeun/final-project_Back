@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import bit.com.a.dao.reviewDao;
+import bit.com.a.dto.classSchedulCount;
 import bit.com.a.dto.reviewDto;
 import bit.com.a.dto.scheduleDto;
 
@@ -51,13 +52,19 @@ public class reviewService {
 		return reviewDao.getStarsAvg(classNum);
 	}
 	
-	// 수강생 여부 체크
+	// 수강일별 수강생 여부 체크
 	public int checkMember(scheduleDto dto) {
 		return reviewDao.checkMember(dto);
 	}
 	
-	// 리뷰 삭제
+	//수강생의 신청한 클래스 갯수
+	public int checkReview(scheduleDto dto) {
+		return reviewDao.checkReview(dto);
+	}
 	
+	
+	
+	// 리뷰 삭제	
 	public void reviewDel(reviewDto dto) {
 		reviewDao.reviewDel(dto);
 	}

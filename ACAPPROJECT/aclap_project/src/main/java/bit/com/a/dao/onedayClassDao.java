@@ -79,4 +79,7 @@ public interface onedayClassDao {
 		public List<aclapMemberDto> getMyClassParticipants(int classNum);
 		//내가 개설한 클래스 클릭시 OldRegNum을 NewRegNum과 동일한 값으로 update
 		public void updateOldRegNum(int classNum);
+
+		//어드민 페이지 클래스 총수 조사
+		public int classCount(onedayParam par);
 }

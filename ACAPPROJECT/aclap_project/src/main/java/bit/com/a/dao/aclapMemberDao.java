@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import bit.com.a.dto.aclapMemberDto;
 import bit.com.a.dto.aclapParam;
 import bit.com.a.dto.onedayClassDto;
+import bit.com.a.dto.onedayParam;
 import bit.com.a.dto.participateDto;
 import bit.com.a.dto.scheduleDto;
 
@@ -46,5 +47,7 @@ public interface aclapMemberDao {
 	public int plusMyPoint(participateDto dto);
 	//노티뱃지유무확인
 	public List<onedayClassDto> checkAlertBadge(int memNum);
+	// 유저 count
+	public int userCount(onedayParam par);
 
 }

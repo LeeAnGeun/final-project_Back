@@ -20,7 +20,7 @@ public class likesController {
 	likesService likesService;
 	@Autowired
 	reviewService reviewService;
-	
+	    
 
 	// like 유무 체크 : like == true
 	@RequestMapping(value="/checkLike", method = {RequestMethod.GET, RequestMethod.POST})

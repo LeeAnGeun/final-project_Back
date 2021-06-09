@@ -38,13 +38,13 @@ public class onedayClassService {
 		return onedayClassDao.masterClassCounter(dto);
 	}
 	
-	/*
+	
 	public int classCount(onedayParam par) {
 		System.out.println("onedayClassService classCount 왔음 " + new Date());
 
 		return onedayClassDao.classCount(par);
 	}
-	*/
+	
 
 	//------------------------------mypage-----------------------------
 	public onedayClassDto getOnedayClass(onedayClassDto dto){
@@ -138,7 +138,9 @@ public class onedayClassService {
 	public List<aclapMemberDto> getMyClassParticipants(int classNum) {
 		// 내가 개설한 클래스 클릭시 OldRegNum을 NewRegNum과 동일한 값으로 update
 		onedayClassDao.updateOldRegNum(classNum);
-		
+		System.out.println("updateOldRegNum도착");
 		return onedayClassDao.getMyClassParticipants(classNum);
 	}
+
+	
 }
