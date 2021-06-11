@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import bit.com.a.dao.noticeBbsDao;
+import bit.com.a.dto.aclapMemberDto;
 import bit.com.a.dto.noticeBbsDto;
 import bit.com.a.dto.noticeBbsParam;
 
@@ -42,6 +43,10 @@ public class noticeBbsService {
 		if(n>0)
 			System.out.println("/// noticeBbs write success ///");
 		return true;
+	}
+
+	public int noAnserNoticeCount() {
+		return noticeBbsDao.noAnserNoticeCount();
 	};
 
 }

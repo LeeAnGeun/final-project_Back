@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import bit.com.a.dto.aclapMemberDto;
 import bit.com.a.dto.noticeBbsDto;
 import bit.com.a.service.noticeBbsService;
 
@@ -23,5 +24,14 @@ public class noticeBbsController {
 		result = noticeBbsService.writeNotisBbs(dto);
 		return result;
 	};
+	
+	@RequestMapping(value = "/noAnserNoticeCount", method = RequestMethod.POST)
+	public int noAnserNoticeCount() {
+		System.err.println("noAnserNoticeCount");
+		int count = noticeBbsService.noAnserNoticeCount();
+		System.out.println("noAnserNoticeCount count = " + count);
+		
+		return count;
+	}
 
 }

@@ -36,9 +36,10 @@ public class aclapMemberController {
 	public aclapMemberDto login(aclapMemberDto dto) {
 		System.out.println("////////// MemberController login() //////////");
 		aclapMemberDto mem = service.login(dto);
-		
-		if(mem !=null)
-			System.out.println("login Success!");
+		if(mem.getDel()==1) 
+			System.out.println("/// memNum : "+dto.getMemNum() +" 삭제된 계정 ///");
+		else 
+			System.out.println("/// memNum : "+dto.getMemNum() +" 정상적인 계정 ///");
 		return mem;
 	}
 
@@ -228,11 +229,8 @@ public class aclapMemberController {
 	@RequestMapping(value = "/memberDropOut", method = RequestMethod.POST)
 	public int memberDropOut(aclapMemberDto dto){
 		System.out.println("////////// aclapMemberController memberDropOut() //////////");
-
-		int n =service.memberDropOut(dto);
-		if(n>0)
-			System.out.println("memberDropOut Success!");
-		return n;
+		System.out.println("/// MemNum : "+dto.getMemNum()+" ///");
+		return service.memberDropOut(dto);
 	}
 	
 	// TODO 포인트 충전

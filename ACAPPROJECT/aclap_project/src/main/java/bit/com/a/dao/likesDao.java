@@ -18,5 +18,9 @@ public interface likesDao {
 	public int delLike(likesDto dto);
 	public List<onedayClassDto> getLikeClassList(likeClassParam parma);
 	public int getLikeClassCount(likeClassParam parma);
+	// 회원이 like를 누르면 class에 likeCount + 1 를 한다.
+	public int plusClsLikeCount(likesDto dto);
+	// 회원이 ♡ 누르면 class에 likeCount - 1 를 한다.
+	public int minusClsLikeCount(likesDto dto);
 
 }

@@ -8,12 +8,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import bit.com.a.dao.aclapMemberDao;
+import bit.com.a.dao.noticeBbsDao;
+import bit.com.a.dao.onedayClassDao;
 import bit.com.a.dto.aclapMemberDto;
 import bit.com.a.dto.aclapParam;
 import bit.com.a.dto.onedayClassDto;
 import bit.com.a.dto.onedayParam;
 import bit.com.a.dto.participateDto;
-import bit.com.a.dto.scheduleDto;
 
 @Service
 @Transactional
@@ -21,6 +22,10 @@ public class aclapMemberService {
 	
 	@Autowired
 	aclapMemberDao aclapMemberDao;
+	@Autowired
+	noticeBbsDao noticeBbsDao;
+	@Autowired
+	onedayClassDao onedayClassDao;
 	
 	public int addMember(aclapMemberDto dto) {
 		return aclapMemberDao.addMember(dto);
@@ -52,9 +57,18 @@ public class aclapMemberService {
 			System.out.println("myPageUserUpdate Success!");
 		return aclapMemberDao.login(dto);
 	};
+	/////////////////////////////////////////////////////////
 	public int memberDropOut(aclapMemberDto dto) {
-		return aclapMemberDao.memberDropOut(dto);
+		noticeBbsDao.delnoticeBbs(dto);
+		System.out.println("/// noticeBbs Delete Success ///");
+		onedayClassDao.onedayClassDelete2(dto);
+		System.out.println("/// onedayClass Delete Success ///");
+		int result = aclapMemberDao.memberDropOut(dto);
+		if(result>0) 
+			System.out.println("/// memberDropOut Success ///");
+		return result;
 	};
+	//////////////////////////////////////////////////////
 	public List<aclapMemberDto> memlist(aclapParam par) {
 		return aclapMemberDao.memlist(par);
 	}

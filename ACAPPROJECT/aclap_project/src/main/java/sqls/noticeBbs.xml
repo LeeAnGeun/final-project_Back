@@ -9,7 +9,7 @@
 
 <select resultType="bit.com.a.dto.noticeBbsDto" parameterType="bit.com.a.dto.noticeBbsParam" id="noticeListData">
 SELECT NOTICENUM, MEMNUM, NTITLE, NCONTENT, WDATE, DEL, ANSWER, USERNAME, EMAIL
-FROM (select ROW_NUMBER()OVER(ORDER BY NOTICENUM ASC) AS RNUM, NOTICENUM, N.MEMNUM AS MEMNUM, NTITLE, NCONTENT, WDATE, DEL, ANSWER, A.USERNAME AS USERNAME, A.EMAIL AS EMAIL 
+FROM (select ROW_NUMBER()OVER(ORDER BY answer asc, NOTICENUM desc) AS RNUM, NOTICENUM, N.MEMNUM AS MEMNUM, NTITLE, NCONTENT, WDATE, N.DEL, ANSWER, A.USERNAME AS USERNAME, A.EMAIL AS EMAIL 
 from ACLAPMEMBER A, NOTICEBBS N
 WHERE A.MEMNUM = N.MEMNUM 
 
@@ -25,15 +25,12 @@ WHERE A.MEMNUM = N.MEMNUM
 <if test="choice == 'writer'">AND USERNAME=#{search} </if>
 
 </if>
-order by NOTICENUM ASC, ANSWER DESC) where RNUM BETWEEN ${start} AND ${end}
-ORDER BY ANSWER ASC
+order by rnum asc) where RNUM BETWEEN ${start} AND ${end}
+
 
 </select>
 
 <!-- 글의 총수 -->
-
-
-
 <select resultType="java.lang.Integer" parameterType="bit.com.a.dto.noticeBbsParam" id="noticeListCount">
 SELECT COUNT(*) FROM NOTICEBBS N, ACLAPMEMBER A
 WHERE 1=1 AND A.MEMNUM = N.MEMNUM
@@ -49,9 +46,9 @@ WHERE 1=1 AND A.MEMNUM = N.MEMNUM
 
 </select>
 
-
+<!-- 디테일 -->
 <select id="noticeDetail" parameterType="int" resultType="bit.com.a.dto.noticeBbsDto">
-SELECT NOTICENUM, N.MEMNUM AS MEMNUM, NTITLE, NCONTENT, WDATE, DEL, ANSWER, A.USERNAME AS USERNAME, A.EMAIL AS EMAIL
+SELECT NOTICENUM, N.MEMNUM AS MEMNUM, NTITLE, NCONTENT, WDATE, N.DEL, ANSWER, A.USERNAME AS USERNAME, A.EMAIL AS EMAIL
 FROM ACLAPMEMBER A, NOTICEBBS N
 WHERE A.MEMNUM = N.MEMNUM and NOTICENUM=${noticeNum}
 </select>
@@ -65,5 +62,16 @@ UPDATE NOTICEBBS SET ANSWER=ANSWER+1, NTITLE=CONCAT(NTITLE, '(답변완료)') WH
 INSERT INTO NOTICEBBS (NOTICENUM, MEMNUM, NTITLE, NCONTENT, WDATE, DEL, ANSWER)
 VALUES (SEQ_NOTICEBBS.NEXTVAL, #{memNum}, #{nTitle}, #{nContent}, SYSDATE, 0, 0)
 </insert>
+
+<select id="noAnserNoticeCount" resultType="int">
+	SELECT COUNT(*)
+	FROM NOTICEBBS
+	WHERE ANSWER=0
+</select>
+
+<delete id="delnoticeBbs" parameterType="bit.com.a.dto.aclapMemberDto">
+	DELETE FROM NOTICEBBS
+	WHERE MEMNUM = #{memNum}
+</delete>
 
 </mapper>

@@ -113,9 +113,7 @@ public class adminController {
 			par.setStart(start);
 			par.setEnd(end);
 			
-		//	System.out.println("par = " + par.toString());
 			List<onedayClassDto> list = onedayClassService.getClassList(par);	
-			
 			System.out.println(list.toString());		
 			return list;
 		}

@@ -18,12 +18,24 @@
 		VALUES(#{memNum}, #{classNum})
 	</insert>
 	
+	<update id="plusClsLikeCount" parameterType="bit.com.a.dto.likesDto">
+			UPDATE ONEDAYCLASS
+			SET LIKECOUNT = LIKECOUNT + 1
+			WHERE CLASSNUM=#{classNum}  
+	</update>
+	
 	<!-- like 삭제 -->
 	<delete id="delLike" parameterType="bit.com.a.dto.likesDto">
 		DELETE FROM LIKES
 		WHERE MEMNUM=#{memNum} AND CLASSNUM=#{classNum}
 	</delete>
   
+  	<update id="minusClsLikeCount" parameterType="bit.com.a.dto.likesDto">
+			UPDATE ONEDAYCLASS
+			SET LIKECOUNT = LIKECOUNT - 1
+			WHERE CLASSNUM=#{classNum}  
+	</update>
+	
   	<!-- like class 가져오기 -->
 	<select id="getLikeClassList" parameterType="bit.com.a.dto.likeClassParam" resultType="bit.com.a.dto.onedayClassDto">
 		SELECT X.CLASSNUM AS CLASSNUM, INSTRUCTOR, TITLE, PRIMARYCATEGORY, PRICE, Y.EMAIL, Y.PROFILEPIC, X.STARTDATE

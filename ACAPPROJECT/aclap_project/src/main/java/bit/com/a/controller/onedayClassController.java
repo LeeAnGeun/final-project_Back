@@ -64,7 +64,7 @@ public class onedayClassController {
 	// TODO 문의메일 발송
 	@RequestMapping(value = "/contactMail", method = RequestMethod.POST)
 	public boolean contactMail(String name, String mail, String content) {
-		System.out.println("///// MemberController emailSend() /////");
+		System.out.println("///// MemberController contactMail() /////");
 		System.out.println("이름 : " + name);
 		System.out.println("메일 : " + mail);
 		System.out.println("내용 : " + content);
@@ -137,6 +137,9 @@ public class onedayClassController {
 		System.out.println("interest3 : " + dto.getInterest3());
 
 		List<onedayClassDto> list = onedayClassService.getRecommendClassList(dto);
+		for (onedayClassDto d : list) {
+			System.out.println(d.toString());
+		}
 		if (list.size() != 0)
 			System.out.println("getRecommendClassList Success");
 		return list;
@@ -343,7 +346,7 @@ public class onedayClassController {
 		
 		System.out.println("////////// onedayClassDto onedayClassUpdate() //////////");
 		int classNum = dto.getClassNum();
-		
+		System.out.println(dto.toString());
 		// 개행 <br> 추가
 		String content = dto.getContent().replace("\n", "<br>");
 		String aboutMe = dto.getAboutMe().replace("\n", "<br>");
@@ -527,7 +530,7 @@ public class onedayClassController {
 	}
 	
 	
-	// 클래스 중단(유저)
+	// 클래스 중단
 	@RequestMapping(value = "/onedayClassDelete", method = { RequestMethod.GET, RequestMethod.POST })
 	public boolean onedayClassDelete(onedayClassDto dto) {
 		System.out.println("////////// onedayClassDto onedayClassDelete() //////////");
@@ -539,15 +542,25 @@ public class onedayClassController {
 		return result;
 	}
 	
-	// 클래스 삭제 (마스터)
-	@RequestMapping(value = "/onedayClassMasterDel", method = { RequestMethod.GET, RequestMethod.POST })
-	public boolean onedayClassMasterDel(int classNum) {
-		System.out.println("////////// onedayClassDto onedayClassMasterDel() //////////");
-		System.out.println("/// 중단할 classNum : "+classNum+ " ///");
+	// 클래스 재개
+	@RequestMapping(value = "/onedayClassRestart", method = { RequestMethod.GET, RequestMethod.POST })
+	public boolean onedayClassRestart(onedayClassDto dto) {
+		System.out.println("////////// onedayClassDto onedayClassRestart() //////////");
+		System.out.println("/// 재개할 classNum : "+dto.getClassNum() + " ///");
 		boolean result = false;
-		int n = onedayClassService.onedayClassMasterDel(classNum);
+		int n = onedayClassService.onedayClassRestart(dto);
 		if(n>0)
 			result = true;
 		return result;
+	}
+	
+	// endDate가 지난 클래스를 del=1로 처리
+	@RequestMapping(value = "/updateEndClass", method = { RequestMethod.GET, RequestMethod.POST })
+	public int updateEndClass() {
+		System.out.println("updateEndClass");
+		
+		int count = onedayClassService.updateEndClass();
+		
+		return count;
 	}
 }

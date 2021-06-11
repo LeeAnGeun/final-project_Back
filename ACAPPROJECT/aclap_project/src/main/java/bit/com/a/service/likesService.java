@@ -22,10 +22,15 @@ public class likesService {
 		return likesDao.checkLike(dto);
 	};
 	public int addLike(likesDto dto) {
-		return likesDao.addLike(dto);
+		
+		int count1 = likesDao.addLike(dto);
+		int count2 = likesDao.plusClsLikeCount(dto); // 회원이 like를 누르면 class에 likeCount + 1 를 한다.
+		return count1 * count2;
 	};
 	public int delLike(likesDto dto) {
-		return likesDao.delLike(dto);
+		int count1 = likesDao.delLike(dto);
+		int count2 = likesDao.minusClsLikeCount(dto);
+		return count1 * count2;
 	};
 	public List<onedayClassDto> getLikeClassList(likeClassParam parma){
 		return likesDao.getLikeClassList(parma);

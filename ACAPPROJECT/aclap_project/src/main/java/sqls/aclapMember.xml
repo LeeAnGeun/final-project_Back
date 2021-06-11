@@ -7,8 +7,8 @@
 
     <!-- 일반 회원가입 -->
 	<insert id="addMember" parameterType="bit.com.a.dto.aclapMemberDto">
-		INSERT INTO ACLAPMEMBER (MEMNUM, EMAIL, PWD, USERNAME, NICKNAME, PHONENUM, PROFILEPIC, AUTH, CLASSMASTER, MYPOINT)
-		VALUES(SEQ_MEMBER.NEXTVAL, #{email}, #{pwd}, #{userName}, #{nickName}, #{phoneNum}, #{profilePic}, 3, 0, 3000)
+		INSERT INTO ACLAPMEMBER (MEMNUM, EMAIL, PWD, USERNAME, NICKNAME, PHONENUM, PROFILEPIC, AUTH, CLASSMASTER, MYPOINT, DEL)
+		VALUES(SEQ_MEMBER.NEXTVAL, #{email}, #{pwd}, #{userName}, #{nickName}, #{phoneNum}, #{profilePic}, 3, 0, 3000, 0)
 	</insert>
 
 
@@ -50,8 +50,8 @@
 	
 	<!-- 구글 & 카카오 회원가입 -->
 	<insert id="googleKakaoRegi" parameterType="bit.com.a.dto.aclapMemberDto">
-		INSERT INTO ACLAPMEMBER (MEMNUM, EMAIL, PWD, USERNAME, NICKNAME, PROFILEPIC, AUTH, CLASSMASTER, MYPOINT)
-		VALUES(SEQ_MEMBER.NEXTVAL, #{email}, #{pwd}, #{userName}, #{nickName}, #{profilePic}, 3, 0, 0)
+		INSERT INTO ACLAPMEMBER (MEMNUM, EMAIL, PWD, USERNAME, NICKNAME, PROFILEPIC, AUTH, CLASSMASTER, MYPOINT, DEL)
+		VALUES(SEQ_MEMBER.NEXTVAL, #{email}, #{pwd}, #{userName}, #{nickName}, #{profilePic}, 3, 0, 0, 0)
 	</insert>
 
 	
@@ -79,10 +79,11 @@
 	
 	
 	<!-- 마이페이지_회원 탈퇴 -->
-	<delete id="memberDropOut" parameterType="bit.com.a.dto.aclapMemberDto">		
-		DELETE FROM ACLAPMEMBER
+	<update id="memberDropOut" parameterType="bit.com.a.dto.aclapMemberDto">		
+		UPDATE ACLAPMEMBER
+		SET DEL=1
 		WHERE MEMNUM=#{memNum}
-	</delete>
+	</update>
 	
 
 
@@ -119,7 +120,7 @@
 		SELECT INTEREST1 FROM ACLAPMEMBER WHERE MEMNUM = #{ memNum }
 	</select>
     
-	<!-- mypage.html에서 나의 정보를 얻어오기위함 -->
+	<!-- 마이페이지 에서 나의 정보를 얻어오기위함 -->
 	<select id="myinfo" parameterType="bit.com.a.dto.aclapMemberDto" resultType="bit.com.a.dto.aclapMemberDto">
 		SELECT MEMNUM, EMAIL, PWD, USERNAME, NICKNAME, PHONENUM, INTEREST1, INTEREST2, INTEREST3, PROFILEPIC, AUTH, CLASSMASTER, MYPOINT
 		FROM ACLAPMEMBER
@@ -148,4 +149,24 @@
    		FROM ONEDAYCLASS O
     	WHERE O.MASTERNUM = (SELECT MEMNUM FROM ACLAPMEMBER WHERE MEMNUM=#{memNum})
 	</select>
+	
+	<!-- (관리자 페이지) 멤버 리스트 -->
+	<select id ="memlist" parameterType="bit.com.a.dto.aclapParam" resultType="bit.com.a.dto.aclapMemberDto">
+	SELECT USERNAME, NICKNAME, CLASSMASTER, MYPOINT, EMAIL, PHONENUM, MEMNUM, PROFILEPIC, DEL
+	FROM (SELECT ROW_NUMBER()OVER(ORDER BY MEMNUM DESC) AS RNUM, 
+	             MEMNUM, USERNAME, NICKNAME, CLASSMASTER, MYPOINT, EMAIL, PHONENUM, PROFILEPIC, DEL
+	     FROM ACLAPMEMBER
+	     WHERE DEL=0 AND USERNAME LIKE '%'||#{name}||'%'            
+	     ORDER BY MEMNUM DESC)
+	WHERE RNUM BETWEEN ${start} AND ${end}
+	</select>
+
+	<!-- (관리자 페이지) 멤버 수 구하기 -->
+	<select id ="userCount" parameterType="bit.com.a.dto.aclapParam" resultType="int">
+		SELECT count(*)
+	    FROM ACLAPMEMBER
+	    WHERE 1=1      
+	    	AND USERNAME LIKE '%'||#{name}||'%'            
+	</select>
+	
 </mapper>

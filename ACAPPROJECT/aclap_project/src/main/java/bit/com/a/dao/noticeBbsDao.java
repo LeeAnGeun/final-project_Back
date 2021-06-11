@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import bit.com.a.dto.aclapMemberDto;
 import bit.com.a.dto.noticeBbsDto;
 import bit.com.a.dto.noticeBbsParam;
 
@@ -21,4 +22,8 @@ public interface noticeBbsDao {
 	public void noticeAnswerAf(int seq);
 
 	public int writeNotisBbs(noticeBbsDto dto);
+
+	public int noAnserNoticeCount();
+	
+	public int delnoticeBbs(aclapMemberDto dto);
 }

@@ -24,7 +24,7 @@ public class BlogSearchCrawling {
 	
 	@RequestMapping(value="/getYourInterest", method = {RequestMethod.GET, RequestMethod.POST})
 	public String getYourInterest(int seq) {
-		System.out.println("조사할 맴버 넘버: " +seq);
+	//	System.out.println("조사할 맴버 넘버: " +seq);
 		
 		String yourInterest = service.getYourInterest(seq);
 		
@@ -34,7 +34,7 @@ public class BlogSearchCrawling {
 	
 	@RequestMapping(value="/blog", method = {RequestMethod.GET, RequestMethod.POST})
 	public static List<BlogSearchDto> naverSearch(String keyword) throws IOException {	
-		System.out.println("파라미터 keyword == "+ keyword);
+	//	System.out.println("파라미터 keyword == "+ keyword);
 		// jsoup 생성
 		//String searchUrl = "https://section.blog.naver.com/Search/Post.naver?pageNo=1&rangeType=ALL&orderBy=sim&keyword=";
 		String naverUrl = "https://search.naver.com/search.naver?sm=tab_hty.top&where=blog&query=";

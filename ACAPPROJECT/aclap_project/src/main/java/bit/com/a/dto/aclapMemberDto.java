@@ -16,6 +16,7 @@ public class aclapMemberDto {
 	private int myPoint;
 	private int rCount;			 // 신청한 수업
 	private int aCount;			 // 수강한 수업
+	private int del;
 	
 	/////// 기본 생성자 ///////
 	public aclapMemberDto(){
@@ -25,7 +26,7 @@ public class aclapMemberDto {
 	/////// 전체 생성자 ///////
 	public aclapMemberDto(int memNum, String email, String pwd, String userName, String nickName, String phoneNum,
 			String interest1, String interest2, String interest3, String profilePic, int auth, int classMaster,
-			int myPoint) {
+			int myPoint, int del) {
 		super();
 		this.memNum = memNum;
 		this.email = email;
@@ -40,6 +41,7 @@ public class aclapMemberDto {
 		this.auth = auth;
 		this.classMaster = classMaster;
 		this.myPoint = myPoint;
+		this.del = del;
 	}
 	
 	
@@ -83,6 +85,14 @@ public class aclapMemberDto {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	
+	public int getDel() {
+		return del;
+	}
+	
+	public void setDel(int del) {
+		this.del = del;
 	}
 
 	public String getPwd() {

@@ -22,6 +22,7 @@ public interface reviewDao {
 	
 	// 리뷰 리스트 가져오기
 	public List<reviewDto> getReviewList(reviewDto dto);
+
 	
 	// 리뷰 수정
 	public boolean updateReview (reviewDto dto);

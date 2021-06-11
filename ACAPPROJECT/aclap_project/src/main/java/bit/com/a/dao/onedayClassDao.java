@@ -65,11 +65,14 @@ public interface onedayClassDao {
 		// 클래스 수정하기
 		public int onedayClassUpdate(onedayClassDto dto);
 		
-		// 클래스 중단하기
+		// 클래스 중단하기 (ClassNum)
 		public int onedayClassDelete(onedayClassDto dto);
 		
-		// 클래스 삭제하기
-		public int onedayClassMasterDel(int classNum);
+		// 클래스 중단하기 (MasterNum)
+		public int onedayClassDelete2(aclapMemberDto dto);
+		
+		// 클래스 재개하기
+		public int onedayClassRestart(onedayClassDto dto);
 		
 		// 참여자 수를 NewRegNum에 update
 		public int updateNewRegNum(participateDto dto);
@@ -77,12 +80,13 @@ public interface onedayClassDao {
 		//내가 개설한 클래스 정보 가져오기
 		public List<onedayClassDto> getMyClassList(int masterNum);
 		//내가 개설한 클래스 클릭시 참가자 보기
-		public List<aclapMemberDto> getMyClassParticipants(int classNum);
+		public List<aclapMemberDto> getMyClassParticipants(participateDto dto);
 		//내가 개설한 클래스 클릭시 OldRegNum을 NewRegNum과 동일한 값으로 update
-		public void updateOldRegNum(int classNum);
+		public void updateOldRegNum(participateDto dto);
 
 		//어드민 페이지 클래스 총수 조사
 		public int classCount(onedayParam par);
-		
-		
+
+		// endDate가 지난 클래스를 del=1로 처리
+		public int updateEndClass();
 }

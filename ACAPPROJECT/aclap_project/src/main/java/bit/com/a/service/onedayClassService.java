@@ -123,15 +123,13 @@ public class onedayClassService {
 		return n;
 	};
 	
-	// 클래스 삭제 
-	public int onedayClassMasterDel(int classNum) {
-		int n = onedayClassDao.onedayClassMasterDel(classNum);
+	// 클래스 재개하기
+	public int onedayClassRestart(onedayClassDto dto) {
+		int n = onedayClassDao.onedayClassRestart(dto);
 		if(n>0)
-			System.out.println("=== onedayClassMasterDel Success ===");
+			System.out.println("=== onedayClassDelete Success ===");
 		return n;
 	};
-
-	
 	
 	
 	// 참여자 수를 NewRegNum에 update
@@ -144,11 +142,16 @@ public class onedayClassService {
 		return onedayClassDao.getMyClassList(masterNum);
 	}
 	//내가 개설한 클래스 클릭시 참가자 보기
-	public List<aclapMemberDto> getMyClassParticipants(int classNum) {
+	public List<aclapMemberDto> getMyClassParticipants(participateDto dto) {
 		// 내가 개설한 클래스 클릭시 OldRegNum을 NewRegNum과 동일한 값으로 update
-		onedayClassDao.updateOldRegNum(classNum);
+		onedayClassDao.updateOldRegNum(dto);
 		System.out.println("updateOldRegNum도착");
-		return onedayClassDao.getMyClassParticipants(classNum);
+		return onedayClassDao.getMyClassParticipants(dto);
+	}
+
+	// endDate가 지난 클래스를 del=1로 처리
+	public int updateEndClass() {
+		return onedayClassDao.updateEndClass();
 	}
 
 	
