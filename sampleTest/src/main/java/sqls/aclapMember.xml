@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+  <mapper namespace="bit.com.a.dao.aclapMemberDao">
+
+    <!-- 일반 회원가입 -->
+	<insert id="addMember" parameterType="bit.com.a.dto.aclapMemberDto">
+		INSERT INTO ACLAPMEMBER (MEMNUM, EMAIL, PWD, USERNAME, NICKNAME, PHONENUM, PROFILEPIC, AUTH, CLASSMASTER, MYPOINT, DEL)
+		VALUES(SEQ_MEMBER.NEXTVAL, #{email}, #{pwd}, #{userName}, #{nickName}, #{phoneNum}, #{profilePic}, 3, 0, 3000, 0)
+	</insert>
+
+
+    <!-- 이메일 중복확인 -->
+	<select id="checkEmail" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT NVL(COUNT(*), 0) <!-- null값이 나올 수 있으므로 -->
+		FROM ACLAPMEMBER
+		WHERE EMAIL=#{email}
+	</select>
+	
+	
+	<!-- 닉네임 중복확인 -->
+	<select id="checkNickName" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT NVL(COUNT(*), 0) <!-- null값이 나올 수 있으므로 -->
+		FROM ACLAPMEMBER
+		WHERE NICKNAME=#{nickName}
+	</select>
+	
+
+	<!-- 일반 로그인 -->
+	<select id="login" parameterType="bit.com.a.dto.aclapMemberDto"
+		resultType="bit.com.a.dto.aclapMemberDto">
+		SELECT *
+		FROM ACLAPMEMBER
+		WHERE EMAIL=#{email} AND PWD=#{pwd}
+	</select>
+
+
+	<!-- 구글 & 카카오 로그인 -->
+	<select id="googleKakaoLogin" parameterType="bit.com.a.dto.aclapMemberDto"
+		resultType="bit.com.a.dto.aclapMemberDto">
+		SELECT *
+		FROM ACLAPMEMBER
+		WHERE EMAIL=#{email}
+	</select>
+	
+	
+	<!-- 구글 & 카카오 회원가입 -->
+	<insert id="googleKakaoRegi" parameterType="bit.com.a.dto.aclapMemberDto">
+		INSERT INTO ACLAPMEMBER (MEMNUM, EMAIL, PWD, USERNAME, NICKNAME, PROFILEPIC, AUTH, CLASSMASTER, MYPOINT, DEL)
+		VALUES(SEQ_MEMBER.NEXTVAL, #{email}, #{pwd}, #{userName}, #{nickName}, #{profilePic}, 3, 0, 0, 0)
+	</insert>
+
+	
+	<!-- 임시 비밀번호 변경 -->
+	<update id="findPwdAfUpdate" parameterType="bit.com.a.dto.aclapMemberDto">		
+		UPDATE ACLAPMEMBER
+		SET PWD=#{pwd}
+		WHERE EMAIL=#{email} 
+	</update>
+
+
+	<!-- //////////////////////////////////////////////// -->
+
+	
+	<!-- 마이페이지_회원정보 수정  -->
+	<update id="myPageUserUpdate" parameterType="bit.com.a.dto.aclapMemberDto">		
+		UPDATE ACLAPMEMBER
+		SET USERNAME=#{userName},
+		    NICKNAME=#{nickName},
+		    PWD=#{pwd},
+		    PHONENUM=#{phoneNum},
+		    PROFILEPIC=#{profilePic}
+		WHERE MEMNUM=#{memNum}
+	</update>
+	
+	
+	<!-- 마이페이지_회원 탈퇴 -->
+	<update id="memberDropOut" parameterType="bit.com.a.dto.aclapMemberDto">		
+		UPDATE ACLAPMEMBER
+		SET DEL=1
+		WHERE MEMNUM=#{memNum}
+	</update>
+	
+
+
+	<!-- classMaster Update -->
+	<update id="classMasterUpdate" parameterType="java.lang.Integer">		
+		UPDATE ACLAPMEMBER
+		SET CLASSMASTER=1
+		WHERE MEMNUM=#{memNum}
+	</update>
+
+	
+	
+
+	
+	<!-- myPoint Update -->
+	<update id="myPointUpdate" parameterType="bit.com.a.dto.aclapMemberDto">		
+		UPDATE ACLAPMEMBER
+		SET MYPOINT=MYPOINT+1
+		WHERE MEMNUM=#{memNum}
+	</update>
+	
+	<!-- 선호도조사 -->
+	<update id="setInterest" parameterType="bit.com.a.dto.aclapMemberDto">		
+		UPDATE ACLAPMEMBER
+		SET INTEREST1=#{interest1} 
+
+		<if test="interest2 != null and interest2 != ''">, INTEREST2=#{interest2}</if>
+		<if test="interest3 != null and interest3 != ''">, INTEREST3=#{interest3}</if>    
+		    
+		WHERE MEMNUM=${memNum}
+	</update>
+    
+	<select id="getYourInterest" parameterType="int" resultType="String">
+		SELECT INTEREST1 FROM ACLAPMEMBER WHERE MEMNUM = #{ memNum }
+	</select>
+    
+	<!-- 마이페이지 에서 나의 정보를 얻어오기위함 -->
+	<select id="myinfo" parameterType="bit.com.a.dto.aclapMemberDto" resultType="bit.com.a.dto.aclapMemberDto">
+		SELECT MEMNUM, EMAIL, PWD, USERNAME, NICKNAME, PHONENUM, INTEREST1, INTEREST2, INTEREST3, PROFILEPIC, AUTH, CLASSMASTER, MYPOINT
+		FROM ACLAPMEMBER
+		WHERE MEMNUM = #{ memNum }
+	</select>
+
+
+	<update id="chargePoints" parameterType="HashMap" >
+		UPDATE ACLAPMEMBER
+		SET MYPOINT=MYPOINT+#{money}
+		WHERE EMAIL=#{email}
+	</update>
+
+	<update id="minusMyPoint" parameterType="bit.com.a.dto.participateDto">
+		UPDATE ACLAPMEMBER SET MYPOINT = MYPOINT - #{rPoint} 
+		WHERE MEMNUM = #{memNum}
+	</update>
+    
+	<update id="plusMyPoint" parameterType="bit.com.a.dto.participateDto">
+		UPDATE ACLAPMEMBER SET MYPOINT = MYPOINT + #{rPoint} 
+		WHERE MEMNUM = #{memNum}
+	</update>
+	
+	<select id="checkAlertBadge" parameterType="int" resultType="bit.com.a.dto.onedayClassDto">
+		SELECT OLDREGNUM, NEWREGNUM
+   		FROM ONEDAYCLASS O
+    	WHERE O.MASTERNUM = (SELECT MEMNUM FROM ACLAPMEMBER WHERE MEMNUM=#{memNum})
+	</select>
+	
+	<!-- (관리자 페이지) 멤버 리스트 -->
+	<select id ="memlist" parameterType="bit.com.a.dto.aclapParam" resultType="bit.com.a.dto.aclapMemberDto">
+	SELECT USERNAME, NICKNAME, CLASSMASTER, MYPOINT, EMAIL, PHONENUM, MEMNUM, PROFILEPIC, DEL
+	FROM (SELECT ROW_NUMBER()OVER(ORDER BY MEMNUM DESC) AS RNUM, 
+	             MEMNUM, USERNAME, NICKNAME, CLASSMASTER, MYPOINT, EMAIL, PHONENUM, PROFILEPIC, DEL
+	     FROM ACLAPMEMBER
+	     WHERE DEL=0 AND USERNAME LIKE '%'||#{name}||'%'            
+	     ORDER BY MEMNUM DESC)
+	WHERE RNUM BETWEEN ${start} AND ${end}
+	</select>
+
+	<!-- (관리자 페이지) 멤버 수 구하기 -->
+	<select id ="userCount" parameterType="bit.com.a.dto.aclapParam" resultType="int">
+		SELECT count(*)
+	    FROM ACLAPMEMBER
+	    WHERE 1=1      
+	    	AND USERNAME LIKE '%'||#{name}||'%'            
+	</select>
+	
+</mapper>

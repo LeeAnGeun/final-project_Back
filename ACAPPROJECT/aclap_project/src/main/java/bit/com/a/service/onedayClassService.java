@@ -24,9 +24,9 @@ import bit.com.a.dto.participateDto;
 public class onedayClassService {
 	
 	@Autowired
-	private onedayClassDao onedayClassDao;
+	onedayClassDao onedayClassDao;
 	@Autowired
-	private likesDao likesDao;
+	likesDao likesDao;
 	
 	public List<onedayClassDto> getClassList(onedayParam par){
 		System.out.println("onedayClassService getClassList 왔음 " + new Date());

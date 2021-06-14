@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="bit.com.a.dao.onedayClassDao">
+
+<select id="getOnedayClass" parameterType="bit.com.a.dto.onedayClassDto" resultType="bit.com.a.dto.onedayClassDto">
+	SELECT O.CLASSNUM, MASTERNUM, INSTRUCTOR, PRIMARYCATEGORY, SECONDARYCATEGORY, TITLE, CONTENT, STARTDATE, ENDDATE, PRICE, INFORMATION, DURATION, LIMITNUM, PREPARATION,
+		ABOUTME, IMAGE1, IMAGE2, IMAGE3, IMAGE4, IMAGE5, LOCATION, YOUTUBELINK, LIKECOUNT, O.DEL, OLDREGNUM, NEWREGNUM, A.PROFILEPIC, A.EMAIL, LAYERSELECT, S.AVGPOINT	
+	FROM ONEDAYCLASS O, ACLAPMEMBER A, (SELECT R.CLASSNUM AS CLASSNUM, AVG(STARPOINT) AS AVGPOINT
+										FROM REVIEW R, ONEDAYCLASS N
+										WHERE R.CLASSNUM = N.CLASSNUM AND R.CLASSNUM = #{classNum}
+										GROUP BY R.CLASSNUM) S
+	WHERE O.MASTERNUM = A.MEMNUM AND S.CLASSNUM = O.CLASSNUM
+		AND O.CLASSNUM = #{classNum}
+</select>
+
+<select id="masterClassCounter" parameterType="java.lang.Integer" resultType="int"> 
+	SELECT COUNT(*)
+	FROM ONEDAYCLASS
+	WHERE MASTERNUM = #{masterNum} AND DEL = 0
+</select>
+
+<!-- 	SELECT COUNT(*)
+	FROM ONEDAYCLASS O, ACLAPMEMBER A
+	WHERE O.MASTERNUM = A.MEMNUM
+	AND A.EMAIL = #{email}
+		AND O.DEL = 0
+ -->
+<!-- 클래스 리스트 정렬 -->
+<select id="classListData" parameterType="bit.com.a.dto.oneDayClassParam" resultType="bit.com.a.dto.onedayClassDto">
+
+SELECT O.CLASSNUM AS CLASSNUM, O.TITLE AS TITLE, O.INSTRUCTOR AS INSTRUCTOR, O.INFORMATION AS INFORMATION, O.DURATION AS DURATION, O.LIMITNUM AS LIMITNUM, O.LIKECOUNT AS LIKECOUNT, 
+AVGPOINT, O.STARTDATE AS STARTDATE, O.ENDDATE AS ENDDATE, O.LOCATION AS LOCATION, O.PRIMARYCATEGORY AS PRIMARYCATEGORY, O.SECONDARYCATEGORY AS SECONDARYCATEGORY, O.PRICE AS PRICE, 
+O.IMAGE1 AS IMAGE1
+FROM (SELECT R.CLASSNUM, AVG(STARPOINT) AS AVGPOINT
+        FROM REVIEW R, ONEDAYCLASS O
+        WHERE R.CLASSNUM = O.CLASSNUM AND O.PRIMARYCATEGORY LIKE '%'||#{primaryCategory}||'%' 
+        GROUP BY R.CLASSNUM) R, ONEDAYCLASS O
+
+
+WHERE R.CLASSNUM = O.CLASSNUM AND O.DEL=0 AND O.ENDDATE > SYSDATE 
+
+
+<if test="choice != null and choice != '' and search != null or search ==''">
+
+<if test="choice == 'orderByLike'">
+AND R.CLASSNUM = O.CLASSNUM AND O.TITLE LIKE '%'||#{search}||'%' AND O.DEL=0 </if>
+
+<if test="choice == 'orderByRecent'">
+AND R.CLASSNUM = O.CLASSNUM AND O.TITLE LIKE '%'||#{search}||'%' 
+</if>
+
+<if test="choice == 'orderByAvg'">
+AND R.CLASSNUM = O.CLASSNUM AND O.TITLE LIKE '%'||#{search}||'%'
+
+
+
+</if>
+
+</if>
+ORDER BY O.LIKECOUNT DESC 
+</select>
+
+
+
+<!-- 나의 도장판 현황 -->
+<select id="myStampList" parameterType="Map" resultType="bit.com.a.dto.myStampDto">
+	SELECT MYSTAMPNUM, MEMNUM, CLASSNUM, PRIMARYCATEGORY, SECONDARYCATEGORY, TITLE
+	FROM (SELECT ROW_NUMBER()OVER(ORDER BY MYSTAMPNUM ASC) AS RNUM, MYSTAMPNUM, MEMNUM, CLASSNUM, PRIMARYCATEGORY, SECONDARYCATEGORY, TITLE
+		FROM MYSTAMP 
+		WHERE MEMNUM = #{memNum}
+			AND CLASSDATE &lt; SYSDATE)  
+	WHERE RNUM&gt;=1+10*#{ pageNum } AND RNUM&lt;=10+10*#{ pageNum }
+</select>
+
+<!-- 도장 갯수 -->
+<select id="stampCount" parameterType="bit.com.a.dto.myStampDto" resultType="Integer">
+	SELECT COUNT(*)
+	FROM MYSTAMP
+	WHERE MEMNUM = #{memNum}
+		AND CLASSDATE &lt; SYSDATE
+</select>
+
+
+
+
+
+<!-- home : 클래스 최신순 리스트 출력 -->
+<select id="getNewestClassList" resultType="bit.com.a.dto.onedayClassDto">
+	SELECT CLASSNUM, INSTRUCTOR, TITLE, IMAGE1, ENDDATE
+	FROM (SELECT ROW_NUMBER()OVER(ORDER BY CLASSNUM DESC) AS RNUM, 
+				 CLASSNUM, INSTRUCTOR, TITLE, IMAGE1, ENDDATE
+		  FROM ONEDAYCLASS 
+		  WHERE DEL=0 AND SYSDATE &lt; ENDDATE)  
+	WHERE RNUM BETWEEN 1 AND 9
+</select>
+
+<!-- home : 클래스 인기순 출력 -->
+<select id="getBestClassList" resultType="bit.com.a.dto.onedayClassDto">
+	SELECT CLASSNUM, INSTRUCTOR, TITLE, IMAGE1, ENDDATE
+	FROM (SELECT ROW_NUMBER()OVER(ORDER BY LIKECOUNT DESC) AS RNUM, 
+				 CLASSNUM, INSTRUCTOR, TITLE, IMAGE1, ENDDATE
+		  FROM ONEDAYCLASS 
+		  WHERE DEL=0 AND SYSDATE &lt; ENDDATE)  
+	WHERE RNUM BETWEEN 1 AND 9
+</select>
+
+<!-- home : 추천 클래스 -->
+<select id="getRecommendClassList" parameterType="bit.com.a.dto.aclapMemberDto" resultType="bit.com.a.dto.onedayClassDto">
+	SELECT CLASSNUM, INSTRUCTOR, TITLE, IMAGE1, ENDDATE, SECONDARYCATEGORY, DEL
+	FROM (SELECT ROW_NUMBER()OVER(ORDER BY LIKECOUNT DESC) AS RNUM,
+				 CLASSNUM, INSTRUCTOR, TITLE, IMAGE1, ENDDATE, SECONDARYCATEGORY, DEL
+		  FROM ONEDAYCLASS 
+		  WHERE DEL=0 AND SYSDATE &lt; ENDDATE AND
+				(SECONDARYCATEGORY LIKE '%'||#{interest1}||'%' OR 
+				SECONDARYCATEGORY LIKE '%'||#{interest2}||'%' OR 
+				SECONDARYCATEGORY LIKE '%'||#{interest3}||'%')) 
+	WHERE RNUM BETWEEN 1 AND 6
+</select> 
+
+
+<!-- 클래스 만들기 -->
+<insert id="onedayClassWrite" parameterType="bit.com.a.dto.onedayClassDto">
+		INSERT INTO ONEDAYCLASS (CLASSNUM, MASTERNUM, INSTRUCTOR, PRIMARYCATEGORY, SECONDARYCATEGORY, TITLE, 
+		                         STARTDATE, ENDDATE, PRICE, DURATION, LIMITNUM, PREPARATION, ABOUTME, CONTENT, INFORMATION,
+		                         IMAGE1, IMAGE2, IMAGE3, IMAGE4, IMAGE5, LOCATION, YOUTUBELINK, LIKECOUNT, DEL, OLDREGNUM, NEWREGNUM, LAYERSELECT)
+		VALUES(SEQ_CLASS.NEXTVAL, #{masterNum}, #{instructor}, #{primaryCategory}, #{secondaryCategory}, #{title}, 
+		       #{startDate}, #{endDate}, #{price}, #{duration}, #{limitNum}, #{preparation}, #{aboutMe}, #{content}, #{information},
+		       #{image1}, #{image2}, #{image3}, #{image4}, #{image5}, #{location}, #{youtubeLink}, 0, 0, 0, 0, #{layerSelect})
+</insert>
+
+
+<!-- 클래스 생성 후 classNum 가져오기 -->
+<select id="onedayClassWriteAfClassNum" resultType="java.lang.Integer">
+	SELECT CLASSNUM
+	FROM ONEDAYCLASS
+	WHERE MASTERNUM=#{masterNum} AND TITLE=#{title} AND PRIMARYCATEGORY=#{primaryCategory} AND SECONDARYCATEGORY=#{secondaryCategory}
+		  AND STARTDATE=#{startDate} AND ENDDATE=#{endDate} AND PRICE=#{price} AND LOCATION=#{location}
+</select>
+
+
+<!-- 클래스 수정 전 뿌려줄 모든 정보 -->
+<select id="onedayClassInfo"  parameterType="bit.com.a.dto.onedayClassDto" resultType="bit.com.a.dto.onedayClassDto">
+	SELECT INSTRUCTOR, PRIMARYCATEGORY, SECONDARYCATEGORY, TITLE, CONTENT, STARTDATE, ENDDATE, PRICE, INFORMATION, DURATION, LIMITNUM, PREPARATION,
+		   ABOUTME, IMAGE1, IMAGE2, IMAGE3, IMAGE4, IMAGE5, LOCATION, NVL(YOUTUBELINK, ' ') AS YOUTUBELINK, EMAIL, PROFILEPIC, LAYERSELECT, YOUTUBELINK
+	FROM ONEDAYCLASS X, ACLAPMEMBER Y
+	WHERE X.MASTERNUM= Y.MEMNUM AND X.CLASSNUM=${classNum}
+</select>
+
+<!-- 클래스 수정 -->
+<update id="onedayClassUpdate" parameterType="bit.com.a.dto.onedayClassDto">
+		UPDATE ONEDAYCLASS 
+		SET PRIMARYCATEGORY=#{primaryCategory}, SECONDARYCATEGORY=#{secondaryCategory}, TITLE=#{title}, STARTDATE=#{startDate},	ENDDATE=#{endDate}, 
+			PRICE=#{price}, DURATION=#{duration}, LIMITNUM=#{limitNum}, PREPARATION=#{preparation}, ABOUTME=#{aboutMe}, DEL=0,
+		 	<if test="image1 != null">IMAGE1=#{image1},</if>
+		 	<if test="image2 != null">IMAGE2=#{image2},</if>
+		 	<if test="image3 != null">IMAGE3=#{image3},</if>
+		 	<if test="image4 != null">IMAGE4=#{image4},</if>
+		 	<if test="image5 != null">IMAGE5=#{image5},</if>
+			CONTENT=#{content}, INFORMATION=#{information}, LAYERSELECT=#{layerSelect}, 
+			LOCATION=#{location}, YOUTUBELINK=#{youtubeLink}
+		WHERE CLASSNUM=#{classNum}	
+</update> 
+
+<!-- 클래스 중단 (classNum)-->
+<update id="onedayClassDelete" parameterType="bit.com.a.dto.onedayClassDto">
+	UPDATE ONEDAYCLASS 
+	SET DEL=1
+	WHERE CLASSNUM = #{classNum}
+</update>
+
+<!-- 클래스 중단 (memNum) -->
+<update id="onedayClassDelete2" parameterType="bit.com.a.dto.aclapMemberDto">
+	UPDATE ONEDAYCLASS 
+	SET DEL=1
+	WHERE MASTERNUM=#{memNum}
+</update>
+
+<!-- 클래스 재개 -->
+<update id="onedayClassRestart" parameterType="bit.com.a.dto.onedayClassDto">
+	UPDATE ONEDAYCLASS 
+	SET DEL=0
+	WHERE CLASSNUM = #{classNum}
+</update>
+
+
+<update id="updateNewRegNum" parameterType="bit.com.a.dto.participateDto">
+	UPDATE ONEDAYCLASS SET NEWREGNUM = NEWREGNUM + 1
+	WHERE CLASSNUM = #{classNum}
+</update>
+
+<!-- 내가 개설한 클래스 정보 리스트 가져오기 -->
+<select id="getMyClassList" parameterType="int" resultType="bit.com.a.dto.onedayClassDto">
+	SELECT CLASSNUM, TITLE, LIKECOUNT, STARTDATE, ENDDATE, OLDREGNUM, NEWREGNUM, DEL
+	FROM ONEDAYCLASS
+	WHERE MASTERNUM = #{masterNum}
+	ORDER BY CLASSNUM
+</select>
+
+<!-- 내가 개설한 클래스 클릭시 참가자 보기 -->
+<select id="getMyClassParticipants" parameterType="bit.com.a.dto.participateDto" resultType="bit.com.a.dto.scheduleDto">
+SELECT RDATE, PARTICIPANTS, USERNAME AS NAME, NICKNAME, PROFILEPIC, EMAIL 
+FROM SCHEDULE S, ACLAPMEMBER A
+WHERE S.DEL =0 AND S.MEMNUM = A.MEMNUM AND S.CLASSNUM=#{classNum} AND SUBSTR(S.RDATE, 1, 7)=#{ classDate }
+ORDER BY RDATE
+</select>
+
+<!-- 내가 개설한 클래스 클릭시 OldRegNum을 NewRegNum과 동일한 값으로 update -->
+<update id="updateOldRegNum" parameterType="bit.com.a.dto.participateDto">
+	UPDATE ONEDAYCLASS SET OLDREGNUM = NEWREGNUM
+	WHERE CLASSNUM = #{classNum}
+</update>
+
+
+<!-- (관리자페이지) 원데이 클래스 리스트 -->
+<select id="getClassList" parameterType="bit.com.a.dto.onedayParam" resultType="bit.com.a.dto.onedayClassDto">
+SELECT CLASSNUM, INSTRUCTOR, PRIMARYCATEGORY, SECONDARYCATEGORY, TITLE, STARTDATE, ENDDATE, LOCATION, DEL
+FROM (SELECT ROW_NUMBER()OVER(ORDER BY CLASSNUM DESC) AS RNUM, 
+               CLASSNUM, INSTRUCTOR, PRIMARYCATEGORY, SECONDARYCATEGORY, TITLE, STARTDATE, ENDDATE, LOCATION, DEL
+      FROM ONEDAYCLASS
+      WHERE 1=1 AND INSTRUCTOR LIKE '%'||#{name}||'%'            
+      ORDER BY CLASSNUM DESC)
+WHERE RNUM BETWEEN ${start} AND ${end}
+</select>
+
+<!-- (관리자페이지) 클래수 총수 -->
+<select id="classCount" parameterType="bit.com.a.dto.onedayParam" resultType="java.lang.Integer">
+	SELECT COUNT(*)
+	FROM ONEDAYCLASS
+	WHERE 1=1
+	AND INSTRUCTOR LIKE '%'||#{name}||'%'
+</select>
+
+
+<!-- (onedayClassDetail) 강사가 개설한 모든 클래스 가져오기 -->
+<select id="teacherAllClass" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+	SELECT CLASSNUM 		
+	FROM ONEDAYCLASS
+	WHERE MASTERNUM = #{masterNum}
+</select>
+
+<update id="updateEndClass">
+	UPDATE ONEDAYCLASS SET DEL = 1
+	WHERE ENDDATE &lt; SYSDATE
+		AND DEL = 0
+</update>
+
+
+
+
+</mapper>

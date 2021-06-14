@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+  <mapper namespace="bit.com.a.dao.likesDao">
+  
+    <!-- like 유무 체크 -->
+	<select id="checkLike" parameterType="bit.com.a.dto.likesDto" resultType="java.lang.Integer">
+		SELECT COUNT(MEMNUM)
+		FROM LIKES
+		WHERE MEMNUM=#{memNum} AND CLASSNUM=#{classNum}
+	</select>
+  
+    <!-- like 등록 -->
+	<insert id="addLike" parameterType="bit.com.a.dto.likesDto">
+		INSERT INTO LIKES (MEMNUM, CLASSNUM)
+		VALUES(#{memNum}, #{classNum})
+	</insert>
+	
+	<update id="plusClsLikeCount" parameterType="bit.com.a.dto.likesDto">
+			UPDATE ONEDAYCLASS
+			SET LIKECOUNT = LIKECOUNT + 1
+			WHERE CLASSNUM=#{classNum}  
+	</update>
+	
+	<!-- like 삭제 -->
+	<delete id="delLike" parameterType="bit.com.a.dto.likesDto">
+		DELETE FROM LIKES
+		WHERE MEMNUM=#{memNum} AND CLASSNUM=#{classNum}
+	</delete>
+  
+  	<update id="minusClsLikeCount" parameterType="bit.com.a.dto.likesDto">
+			UPDATE ONEDAYCLASS
+			SET LIKECOUNT = LIKECOUNT - 1
+			WHERE CLASSNUM=#{classNum}  
+	</update>
+	
+  	<!-- like class 가져오기 -->
+	<select id="getLikeClassList" parameterType="bit.com.a.dto.likeClassParam" resultType="bit.com.a.dto.onedayClassDto">
+		SELECT X.CLASSNUM AS CLASSNUM, INSTRUCTOR, TITLE, PRIMARYCATEGORY, PRICE, Y.EMAIL, Y.PROFILEPIC, X.STARTDATE
+		FROM (SELECT ROW_NUMBER()OVER(ORDER BY STARTDATE) AS RNUM,
+	                 CLASSNUM, INSTRUCTOR, TITLE, PRIMARYCATEGORY, PRICE, MASTERNUM, STARTDATE
+		  	  FROM ONEDAYCLASS
+		  	  WHERE CLASSNUM IN (SELECT CLASSNUM FROM LIKES WHERE MEMNUM=#{memNum})) X,
+		      ACLAPMEMBER Y
+		WHERE Y.MEMNUM IN X.MASTERNUM AND X.RNUM BETWEEN #{start} AND #{end}
+		ORDER BY RNUM
+	</select>
+
+	<!-- like Class 글의 총 수 구하기 --> 
+	<select id="getLikeClassCount" parameterType="bit.com.a.dto.likeClassParam" resultType="java.lang.Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM LIKES
+		WHERE MEMNUM=#{memNum}
+	</select>
+	
+	<!-- 선생님의 전체 LIKE 갯수 가져오기(onedayClassDetail) -->
+	<select id="getLikeClassForDetail" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM LIKES
+		WHERE CLASSNUM=#{classNum}
+	</select>
+	
+  </mapper>
