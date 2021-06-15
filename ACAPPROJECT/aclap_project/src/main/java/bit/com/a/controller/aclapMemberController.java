@@ -36,10 +36,12 @@ public class aclapMemberController {
 	public aclapMemberDto login(aclapMemberDto dto) {
 		System.out.println("////////// MemberController login() //////////");
 		aclapMemberDto mem = service.login(dto);
-		if(mem.getDel()==1) 
-			System.out.println("/// memNum : "+dto.getMemNum() +" 삭제된 계정 ///");
-		else 
-			System.out.println("/// memNum : "+dto.getMemNum() +" 정상적인 계정 ///");
+		if(mem != null) {
+			if(mem.getDel()==1) 
+				System.out.println("/// memNum : "+dto.getMemNum() +" 삭제된 계정 ///");
+			else 
+				System.out.println("/// memNum : "+dto.getMemNum() +" 정상적인 계정 ///");
+		}
 		return mem;
 	}
 

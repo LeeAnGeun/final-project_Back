@@ -4,7 +4,9 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
 
 import bit.com.a.FileUploadUtiles;
 import bit.com.a.NoClassUtil;
@@ -51,14 +52,19 @@ public class onedayClassController {
 		return oClass;
 	}
 	
-	// 멤버가 만든 클래스 수를 counter를 위함
+	// 디테일 뷰. 강사 개설 클래스 및 총 Like 수 
 	@RequestMapping(value = "/masterClassCounter", method = RequestMethod.POST)
-	public int masterClassCounter(aclapMemberDto dto) {
-		System.out.println("masterClassCounter dto = " + dto.toString());
+	public Map<String, Integer> masterClassCounter(int masterNum) {
 		
-		int count = onedayClassService.masterClassCounter(dto);
+		int allClass = onedayClassService.masterClassCounter(masterNum);
+		System.out.println("/// 진행 클래스 : " + allClass +" 개 ///");
+		int allLikes = onedayClassService.allLikesCount(masterNum);
+		System.out.println("/// Likes Total : " + allLikes +" 개 ///");
 		
-		return count;
+		Map<String, Integer> map = new HashMap<>();
+		map.put("allClass", allClass);
+		map.put("allLikes", allLikes);
+		return map;
 	}
 
 	// TODO 문의메일 발송

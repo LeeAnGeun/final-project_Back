@@ -20,8 +20,7 @@ public class FileUploadUtiles {
 		}
 	}
 
-	
-	// newfilename 만들기
+		// newfilename 만들기
 	public static String getNewFilename(String f, int num) {
 
 		String filename = "";

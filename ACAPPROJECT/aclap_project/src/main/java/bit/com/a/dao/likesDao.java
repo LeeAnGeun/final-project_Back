@@ -22,5 +22,7 @@ public interface likesDao {
 	public int plusClsLikeCount(likesDto dto);
 	// 회원이 ♡ 누르면 class에 likeCount - 1 를 한다.
 	public int minusClsLikeCount(likesDto dto);
-
+	// 선생님의 전체 LIKE 갯수 가져오기(onedayClassDetail)
+	public int getLikeClassForDetail(int classNum);
+	
 }

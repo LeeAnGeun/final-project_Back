@@ -15,7 +15,6 @@ import bit.com.a.dto.scheduleDto;
 @Transactional
 public class reviewService {
 
-	
 	@Autowired
 	reviewDao reviewDao;
 	public void oneonedayClassWriteReview(int classNum) {

@@ -84,14 +84,14 @@ public class adminController {
 
 			int sn = par.getPage(); // 0 1 2
 			int start = sn*10+1;       // 1 11 21
-			int end = (sn + 1)*100;	   // 10 20 30 
+			int end = (sn + 1)*10;	   // 10 20 30 
 			
 			par.setStart(start);
 			par.setEnd(end);
 			
-			System.out.println("par = " + par.toString());
+		//	System.out.println("par = " + par.toString());
 			List<aclapMemberDto> list = aclapMemberService.memlist(par);
-			System.out.println(list.toString());	
+		//	System.out.println(list.toString());	
 			return list;
 			
 			

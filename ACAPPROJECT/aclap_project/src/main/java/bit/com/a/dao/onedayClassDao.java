@@ -26,7 +26,7 @@ public interface onedayClassDao {
 		public onedayClassDto getOnedayClass(onedayClassDto dto);
 		
 		// 멤버가 만든 클래스 count
-		public int masterClassCounter(aclapMemberDto dto);
+		public int masterClassCounter(int masterNum);
 		
 
 		// 나의 도장판 현황
@@ -89,4 +89,7 @@ public interface onedayClassDao {
 
 		// endDate가 지난 클래스를 del=1로 처리
 		public int updateEndClass();
+		
+		// 강사의 모든 classNum 출력
+		public List<Integer> teacherAllClass(int masterNum);
 }

@@ -4,17 +4,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileSystemUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import bit.com.a.dao.aclapMemberDao;
+import bit.com.a.dao.likesDao;
 import bit.com.a.dao.onedayClassDao;
-
-import bit.com.a.dto.oneDayClassParam;
 import bit.com.a.dto.aclapMemberDto;
+import bit.com.a.dto.likesDto;
 import bit.com.a.dto.myStampDto;
-
+import bit.com.a.dto.oneDayClassParam;
 import bit.com.a.dto.onedayClassDto;
 import bit.com.a.dto.onedayParam;
 import bit.com.a.dto.participateDto;
@@ -25,6 +25,8 @@ public class onedayClassService {
 	
 	@Autowired
 	private onedayClassDao onedayClassDao;
+	@Autowired
+	private likesDao likesDao;
 	
 	public List<onedayClassDto> getClassList(onedayParam par){
 		System.out.println("onedayClassService getClassList 왔음 " + new Date());
@@ -34,8 +36,8 @@ public class onedayClassService {
 	}
 	
 	// 멤버가 만든 클래스 count
-	public int masterClassCounter(aclapMemberDto dto) {
-		return onedayClassDao.masterClassCounter(dto);
+	public int masterClassCounter(int masterNum) {
+		return onedayClassDao.masterClassCounter(masterNum);
 	}
 	
 	
@@ -152,6 +154,27 @@ public class onedayClassService {
 	// endDate가 지난 클래스를 del=1로 처리
 	public int updateEndClass() {
 		return onedayClassDao.updateEndClass();
+	}
+	
+	// 강사의 모든 Like 수 가져오기
+	public int allLikesCount(int masterNum){
+		List<Integer> classNum =  onedayClassDao.teacherAllClass(masterNum);
+		System.out.println("/////////////////////////classNum" + classNum.toString());
+		int allLike = 0;
+		
+		for(int i=0; i<classNum.size(); i++) {
+			System.out.println("classNum = " + classNum.get(i));
+			likesDto d = new likesDto();
+			d.setClassNum(classNum.get(i));
+			d.setMemNum(masterNum);
+			
+			int tableCheck = likesDao.checkLike(d);
+			if(tableCheck != 0 && classNum.get(i) != 1) 
+
+				allLike += likesDao.getLikeClassForDetail(classNum.get(i));
+		}
+		System.out.println("all : " + allLike);
+		return allLike;
 	}
 
 	

@@ -55,6 +55,11 @@
 		WHERE MEMNUM=#{memNum}
 	</select>
 	
-	
+	<!-- 선생님의 전체 LIKE 갯수 가져오기(onedayClassDetail) -->
+	<select id="getLikeClassForDetail" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM LIKES
+		WHERE CLASSNUM={classNum}
+	</select>
 	
   </mapper>
